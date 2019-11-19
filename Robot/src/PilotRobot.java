@@ -15,14 +15,6 @@ import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 import lejos.hardware.Sound;
 
-// PilotRobot.java
-// 
-// Based on the SimpleRobot class, this provides access to the
-// sensors, and constructs a MovePilot to control the robot.
-//
-// Terry Payne
-// 1st October 2018
-//
 
 public class PilotRobot {
 	public static final int NORTH = 0;
@@ -80,8 +72,8 @@ public class PilotRobot {
 		// The offset number is the distance between the centre
 		// of wheel to the centre of robot (4.9 cm)
 		// NOTE: this may require some trial and error to get right!!!
-		Wheel leftWheel = WheeledChassis.modelWheel(Motor.B, 4.21975).offset(-5.2382);
-		Wheel rightWheel = WheeledChassis.modelWheel(Motor.D, 4.21975).offset(5.2382);
+		Wheel leftWheel = WheeledChassis.modelWheel(Motor.B, 4.23877).offset(-5.4188);
+		Wheel rightWheel = WheeledChassis.modelWheel(Motor.D, 4.21099).offset(5.4188);
 		
 		Chassis myChassis = new WheeledChassis(new Wheel[]{leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
 
