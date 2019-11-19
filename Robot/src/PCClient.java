@@ -1,29 +1,17 @@
 import java.io.*;
 import java.net.*;
-
-import javax.swing.JFrame;
-
-/**
- * Maximum LEGO EV3: Building Robots with Java Brains
- * ISBN-13: 9780986832291
- * Variant Press (C) 2014
- * Chapter 14 - Client-Server Robotics
- * Robot: EV3 Brick
- * Platform: LEGO EV3
- * @author Brian Bagnall
- * @version July 20, 2014
- */
+ 
 public class PCClient {	
 
 	public static void main(String[] args) throws IOException {
-		String ip = "192.168.70.96"; 
+		String ip = "192.168.70.161"; 
 		
 		if(args.length > 0)
 			ip = args[0];
 		
 		boolean firstConnError = true;
 		
-		Window window = new Window();
+		//Window window = new Window();
 
 		while (true) {
 			
@@ -33,15 +21,16 @@ public class PCClient {
 				firstConnError = true;
 				
 				System.out.println("Connected");
-				InputStream in = sock.getInputStream();
-				
-				ObjectInputStream dIn = new ObjectInputStream(in);
 
+				PCClientSend sender = new PCClientSend(sock);
+				ObjectInputStream oIn = new ObjectInputStream(sock.getInputStream());
+				
+				sender.run();
+				
 				try {
 					while (true) {
-						MappingGateway map = (MappingGateway) dIn.readObject();
-						window.map = map;
-						window.repaintLabels();
+						PCPacket packet = (PCPacket) oIn.readObject();
+						System.out.println(packet.test);
 					}
 					
 				} catch (Exception e) {
