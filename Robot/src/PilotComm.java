@@ -1,8 +1,5 @@
-import java.util.Arrays;
 import java.io.*;
 import java.net.*;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.Button;
 
 // PillotMonitor.java
 // 
@@ -28,8 +25,12 @@ public class PilotComm extends Thread {
     	map = m;
     }
 
-    // The monitor writes various bits of robot state to the screen, then
-    // sleeps.
+    public void handle(PCPacket p) {
+    	if (p.cmd == Type.MOVE) {
+    		robot.setPath(p.target);
+    	}
+    }
+    
     public void run(){
     	
     	while (true) {
@@ -37,16 +38,15 @@ public class PilotComm extends Thread {
 				server = new ServerSocket(port);
 				Socket client = server.accept();
 				
-				PilotCommSend sender = new PilotCommSend(client);
-				ObjectInputStream oIn = new ObjectInputStream(client.getInputStream());
+				PilotCommSend sender = new PilotCommSend(robot, client);
+				sender.start();
 				
-				sender.run();
+				ObjectInputStream oIn = new ObjectInputStream(client.getInputStream());
 				
 				try {
 					while (true) {
 						PCPacket packet = (PCPacket) oIn.readObject();
-						
-						System.out.println(packet.test);
+						handle(packet);
 						
 		    			try {
 		    				Thread.sleep(200);
@@ -56,12 +56,19 @@ public class PilotComm extends Thread {
 				} catch (Exception e) {
 					System.out.println("Error: " + e);
 				}
-				
-				//server.close();
 			}
 			
 			catch(Exception e){
 				//System.out.println(e);
+			}
+			
+			finally {
+				try {
+					server.close();
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			
 			try {

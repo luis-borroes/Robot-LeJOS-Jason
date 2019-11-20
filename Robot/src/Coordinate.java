@@ -35,9 +35,14 @@ public class Coordinate implements Serializable {
 	}
 	
 	public void calculateCost(Coordinate start, Coordinate goal) {
-		double gn = 1.6 * (Math.abs(x - start.x) + Math.abs(y - start.y)); //manhattan distance for cost to node
-		double hn = Math.sqrt(Math.pow(goal.x - x, 2) + Math.pow(goal.y - y, 2)); //euclidian distance for heuristic from node to goal
-		//double hn = Math.abs(x - goal.x) + Math.abs(y - goal.y);
+		double turnCost = 0;
+		
+		if (parent.getDirection() != direction)
+			turnCost++;
+		
+		double gn = Math.abs(x - start.x) + Math.abs(y - start.y) + turnCost; //manhattan distance for cost to node + cost for turns
+		//double hn = Math.sqrt(Math.pow(goal.x - x, 2) + Math.pow(goal.y - y, 2)); //euclidian distance for heuristic from node to goal
+		double hn = Math.abs(x - goal.x) + Math.abs(y - goal.y);
 		
 		cost = gn + hn;
 	}

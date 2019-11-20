@@ -3,13 +3,14 @@ import java.net.*;
  
 public class PCClient {	
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		String ip = "192.168.70.161"; 
 		
 		if(args.length > 0)
 			ip = args[0];
 		
 		boolean firstConnError = true;
+		PCClientSend sender;
 		
 		//Window window = new Window();
 
@@ -22,15 +23,15 @@ public class PCClient {
 				
 				System.out.println("Connected");
 
-				PCClientSend sender = new PCClientSend(sock);
-				ObjectInputStream oIn = new ObjectInputStream(sock.getInputStream());
+				sender = new PCClientSend(sock);
+				sender.start();
 				
-				sender.run();
+				ObjectInputStream oIn = new ObjectInputStream(sock.getInputStream());
 				
 				try {
 					while (true) {
-						PCPacket packet = (PCPacket) oIn.readObject();
-						System.out.println(packet.test);
+						RobotPacket packet = (RobotPacket) oIn.readObject();
+						System.out.println(packet.st + " " + packet.left + " " + packet.right);
 					}
 					
 				} catch (Exception e) {

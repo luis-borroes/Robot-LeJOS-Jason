@@ -20,6 +20,12 @@ public class MappingGateway implements Serializable {
 		}
 
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);
+
+		getGridCell(5, 0).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(1, 3).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(1, 4).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(3, 2).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(4, 3).setStatus(GridCellStatus.OCCUPIED);
 		
 		pathFinding = new PathFinding(this);
 	}

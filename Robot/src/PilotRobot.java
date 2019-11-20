@@ -119,11 +119,11 @@ public class PilotRobot {
 	}
 	
 	public Color getLColID() {
-		return colID.findNearest(getLeftColor());
+		return colID.findNearest(getLeftColor(), false);
 	}
 	
 	public Color getRColID() {
-		return colID.findNearest(getRightColor());
+		return colID.findNearest(getRightColor(), true);
 	}
 	
 	public boolean getLBlack() {
