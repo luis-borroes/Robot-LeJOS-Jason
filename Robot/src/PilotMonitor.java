@@ -69,6 +69,9 @@ public class PilotMonitor extends Thread {
 	    			else if (cellState == GridCellStatus.UNCERTAIN)
 	    				current += "~";
 	    			
+	    			else if (cellState == GridCellStatus.VICTIM)
+	    				current += "&";
+	    			
 	    			else if (cellState == GridCellStatus.UNOCCUPIED)
 	    				current += " ";
 	        			
@@ -135,6 +138,10 @@ public class PilotMonitor extends Thread {
 	    			} else if (cellState == GridCellStatus.UNCERTAIN) {
 	    		        lcd.setStrokeStyle(GraphicsLCD.SOLID);
 	    				lcd.drawRect(MAP_X + x * 10 + 11, y * (-10) + 91, 8, 8);
+		    			
+	    			} else if (cellState == GridCellStatus.VICTIM) {
+	    		        lcd.setStrokeStyle(GraphicsLCD.DOTTED);
+	    				lcd.drawRect(MAP_X + x * 10 + 13, y * (-10) + 93, 4, 4);
 	    			
 	    			} else if (cellState == GridCellStatus.UNOCCUPIED) {
 	    				//do nothing

@@ -1,8 +1,6 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MappingGateway implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class MappingGateway {
 	private GridCell[][] map;
 	private Coordinate currentPosition;
 	private PathFinding pathFinding;
@@ -21,11 +19,10 @@ public class MappingGateway implements Serializable {
 
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);
 
-		getGridCell(5, 0).setStatus(GridCellStatus.OCCUPIED);
-		getGridCell(1, 3).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(0, 3).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(1, 2).setStatus(GridCellStatus.OCCUPIED);
 		getGridCell(1, 4).setStatus(GridCellStatus.OCCUPIED);
-		getGridCell(3, 2).setStatus(GridCellStatus.OCCUPIED);
-		getGridCell(4, 3).setStatus(GridCellStatus.OCCUPIED);
+		getGridCell(3, 3).setStatus(GridCellStatus.OCCUPIED);
 		
 		pathFinding = new PathFinding(this);
 	}
@@ -123,7 +120,7 @@ public class MappingGateway implements Serializable {
 	}
 	
 	public void updateCell(Coordinate coords, boolean occupied) {
-		if ((0 <= coords.x && coords.x < 6) && (0 <= coords.y && coords.y < 7)) {
+		if (isWithinBounds(coords)) {
 			getGridCell(coords).seen(occupied);
 		}
 	}
