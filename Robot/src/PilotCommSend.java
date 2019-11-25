@@ -3,60 +3,65 @@ import java.net.*;
 
 public class PilotCommSend extends Thread {
 	public static final int port = 1234;
-	
+
+	public PilotRobot robot;
 	private Socket client;
 	
-    public PilotCommSend(Socket c){
+    public PilotCommSend(PilotRobot r, Socket c){
     	this.setDaemon(true);
+    	robot = r;
     	client = c;
     }
 
-    // The monitor writes various bits of robot state to the screen, then
-    // sleeps.
-    public void run(){
+    public RobotPacket update(RobotPacket p) {
     	
-    	while (true) {
-			try{
-				ObjectOutputStream oOut = new ObjectOutputStream(client.getOutputStream());
-				
-				RobotPacket r = new RobotPacket();
-				
-				boolean running = true;
-				
-				while (running) {
-	    			//dOut.writeUTF("Angle: " + robot.getAngle() + " Assumed: " + robot.getAssumedAngle() + " Dist: " + robot.getDistance() + " Mov: " + robot.getMoving() + " T: " + robot.getTravelling());
-	    			//dOut.writeUTF("Dist: " + robot.getDistance());
-	    			//dOut.writeUTF("LCol: " + robot.getLBlack() + " RCol: " + robot.getRBlack() + " Dist: " + robot.getDistance());
-	    			//dOut.writeUTF("Pose: " + robot.getPose());
-	    			//dOut.writeUTF("x: " + map.getX() + " y: " + map.getY() + " h: " + robot.getHeading() + " Dist: " + robot.getDistance());
-	    			//dOut.writeUTF("x: " + map.getX() + " y: " + map.getY() + " Dist: " + robot.getDistance());
-					//dOut.writeUTF("x: " + map.getX() + " y: " + map.getY() + " line: " + robot.getOverLine());
-	    			//dOut.writeUTF("LCol: " + robot.getLColID().name() + " RCol: " + robot.getRColID().name() + " Dist: " + robot.getDistance());
-					//dOut.writeUTF("Angle: " + robot.getAngle() + " Assumed: " + robot.getAssumedAngle() + " H: " + robot.getHeading() + " Dist: " + robot.getDistance());
-	//    			dOut.writeUTF("p: " + robot.getPath().size() + " d: " + robot.getDistance() + " f: " + robot.getDone() + " i: " + robot.getPathCounter());
-	    			oOut.reset();
-					oOut.writeObject(r);
-	    			oOut.flush();
-	//    			dOut.flush();
-	    			
-	    			try {
-	    				Thread.sleep(200);
-	    			} catch (InterruptedException e) {}
-				}
-				
-				//server.close();
-			}
-			
-			catch(Exception e){
-				//System.out.println(e);
-			}
-			
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {}
-    	}
+    	if (robot.getPath().size() > 0 || (robot.getRotating() || robot.getMoving()))
+    		p.st = Status.MOVING;
+    	else
+    		p.st = Status.WAITING;
     	
+    	if (robot.getCellCounter() > 4)
+    		p.st = Status.ODOMETRY;
+    	
+    	
+		p.left = robot.getLColID();
+		p.right = robot.getRColID();
+		
+		return p;
     }
     
+    public void run(){
+    	
+		try {
+			ObjectOutputStream oOut = new ObjectOutputStream(client.getOutputStream());
+			
+			RobotPacket packet = new RobotPacket();
+			
+			boolean running = true;
+			
+			while (running) {
+				packet = update(packet);
+				
+    			oOut.reset();
+				oOut.writeObject(packet);
+    			oOut.flush();
+    			
+    			try {
+    				Thread.sleep(200);
+    			} catch (InterruptedException e) {}
+			}
+			
+			//server.close();
+		}
+		
+		catch(Exception e) {
+			//System.out.println(e);
+		}
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {}
+    	
+    }
 
 }

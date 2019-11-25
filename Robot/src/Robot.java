@@ -23,13 +23,17 @@ public class Robot {
 		PilotComm comm = new PilotComm(me, map);
 
 		// Set up the behaviours for the Arbitrator and construct it.
-		//Behavior avoid = new Avoid(me);
+		Behavior avoid = new Avoid(me);
 		//Behavior plan = new Plan(me);
-		//Behavior moveTowards = new MoveTowards(me);
-		//Behavior correctOdometry = new CorrectOdometry(me);
-		//Behavior finish = new Finish(me);
-		Behavior calibrate = new Calibrate(me);
-		Behavior [] bArray = {calibrate};
+		Behavior moveTowards = new MoveTowards(me);
+		Behavior correctOdometry = new CorrectOdometry(me);
+		Behavior finish = new Finish(me);
+		//Behavior calibrate = new Calibrate(me);
+
+		Behavior [] bArray = {moveTowards, correctOdometry, avoid, finish};
+		//Behavior [] bArray = {plan, moveTowards, correctOdometry, avoid, finish};
+		//Behavior [] bArray = {calibrate};
+		
 		Arbitrator arby = new Arbitrator(bArray);
 
 		// Note that in the Arbritrator constructor, a message is sent

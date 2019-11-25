@@ -26,15 +26,7 @@ public class Calibrate implements Behavior {
 		// Allow this method to run
 		suppressed = false;
 
-		pilot.rotate(90);
-		pilot.rotate(90);
-		pilot.rotate(90);
-		pilot.rotate(90);
-		
-		pilot.rotate(90);
-		pilot.rotate(90);
-		pilot.rotate(90);
-		pilot.rotate(90);
+		//pilot.rotate(90);
 		
 	    while(!suppressed) {
 	        Thread.yield();

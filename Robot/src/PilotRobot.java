@@ -1,4 +1,3 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import lejos.hardware.Brick;
@@ -119,11 +118,11 @@ public class PilotRobot {
 	}
 	
 	public Color getLColID() {
-		return colID.findNearest(getLeftColor());
+		return colID.findNearest(getLeftColor(), false);
 	}
 	
 	public Color getRColID() {
-		return colID.findNearest(getRightColor());
+		return colID.findNearest(getRightColor(), true);
 	}
 	
 	public boolean getLBlack() {
@@ -300,6 +299,7 @@ public class PilotRobot {
 			}
 		}
 
+		/*
 		//if rotating, only update cell ahead if we're looking at it
 		if (Math.abs(diff) < 10) {
 			Coordinate cellAhead = map.getNextCell(getHeading(), PilotRobot.FORWARD);
@@ -308,6 +308,7 @@ public class PilotRobot {
 			else
 				map.updateCell(cellAhead, false);
 		}
+		*/
 
 	}
 }

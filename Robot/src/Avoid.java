@@ -41,8 +41,8 @@ public class Avoid implements Behavior {
 		
 		pilot.stop();
 		
-		Coordinate cellAhead = me.getMap().getNextCell(me.getHeading(), PilotRobot.FORWARD);
-		me.getMap().updateCell(cellAhead, true);
+		//Coordinate cellAhead = me.getMap().getNextCell(me.getHeading(), PilotRobot.FORWARD);
+		//me.getMap().updateCell(cellAhead, true);
 		
 		me.rePath();
 		

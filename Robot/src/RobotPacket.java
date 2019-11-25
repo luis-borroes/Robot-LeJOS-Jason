@@ -1,9 +1,17 @@
+import java.io.Serializable;
 
-public class RobotPacket {
+public class RobotPacket implements Serializable {
 	
-	String test = "testing";
+	Status st = Status.WAITING;
+	
+	Color left = Color.WHITE;
+	Color right = Color.WHITE;
 
 	public RobotPacket() {
 		
 	}
+}
+
+enum Status {
+	WAITING, MOVING, ODOMETRY
 }

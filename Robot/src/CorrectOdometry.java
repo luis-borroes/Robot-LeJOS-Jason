@@ -124,7 +124,7 @@ public class CorrectOdometry implements Behavior {
 
 	    
 	    //go back slightly, turn 90 degrees to the path direction
-	    move(-8.5);
+	    move(-8);
 	    
 
 	    //turn towards path direction if perpendicular, otherwise whichever side isn't blocked

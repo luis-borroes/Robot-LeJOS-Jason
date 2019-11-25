@@ -1,9 +1,15 @@
+import java.io.Serializable;
 
-public class PCPacket {
+public class PCPacket implements Serializable {
 	
-	String test = "test 34";
+	Type cmd = Type.NONE;
+	Coordinate target = new Coordinate(0, 0);
 
 	public PCPacket() {
 		
 	}
+}
+
+enum Type {
+	NONE, MOVE, INIT
 }

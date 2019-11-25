@@ -11,7 +11,7 @@ public class GridCell implements Serializable {
 	private int m;
 	
 	public GridCell() {
-		this.status = GridCellStatus.UNKNOWN;
+		this.status = GridCellStatus.UNOCCUPIED;
 		this.count = 0;
 		this.m = 0;
 	}
@@ -62,5 +62,5 @@ public class GridCell implements Serializable {
 }
 
 enum GridCellStatus {
-	OCCUPIED, UNOCCUPIED, UNKNOWN, UNCERTAIN
+	OCCUPIED, UNOCCUPIED, UNKNOWN, UNCERTAIN, VICTIM
 }
