@@ -1,0 +1,57 @@
+/*
+
+    testing
+
+    ---------------------------
+
+
+
+    Jason Project File
+
+
+
+    This file defines the initial state of the MAS
+
+
+
+    Jason 
+
+    November 19, 2019 - 12:27:07
+
+*/
+
+
+
+MAS testing {
+
+
+
+    infrastructure: Centralised
+
+	
+	environment: ParamedicEnv
+
+
+    agents:
+
+        sample_agent;
+
+        doctor;
+
+        paramedic;
+
+}
+
+
+/*
+!started.
+
++!start :true<-
+	.my_name(Name);
+	myAction(Name);
+	.print("Hello world!").
+	
++percept(demo):true<-
+	.print("this worked!").
+*/
+
