@@ -29,6 +29,10 @@ public class PilotComm extends Thread {
     	if (p.cmd == Type.MOVE) {
     		robot.setPath(p.target);
     	}
+    	
+    	if (p.cmd == Type.INIT) {
+    		map.load(p.map);
+    	}
     }
     
     public void run(){
