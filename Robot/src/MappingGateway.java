@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class MappingGateway {
 	private GridCell[][] map;
 	private Coordinate currentPosition;
+	private Coordinate hospital;
 	private PathFinding pathFinding;
 	
 	public MappingGateway(Coordinate initialPos) {
@@ -17,6 +18,7 @@ public class MappingGateway {
 			}
 		}
 
+		hospital = new Coordinate(0, 0);
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);
 		
 		pathFinding = new PathFinding(this);
@@ -30,6 +32,8 @@ public class MappingGateway {
 		for (int i = 0; i < m.victims.size(); i++) {
 			getGridCell(m.victims.get(i)).setStatus(GridCellStatus.VICTIM);
 		}
+		
+		hospital = m.hospital;
 	}
 	
 	public Coordinate getCurrentPosition() {

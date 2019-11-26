@@ -1,13 +1,16 @@
 import java.io.*;
 import java.net.*;
  
-public class PCClient {	
+public class PCClient extends Thread {
+	
+	MapPacket map;
+	
+	public PCClient(MapPacket m) {
+		map = m;
+	}
 
-	public static void main(String[] args) {
+	public void run() {
 		String ip = "192.168.70.161"; 
-		
-		if(args.length > 0)
-			ip = args[0];
 		
 		boolean firstConnError = true;
 		PCClientSend sender;
@@ -22,15 +25,6 @@ public class PCClient {
 				firstConnError = true;
 				
 				System.out.println("Connected");
-				
-				MapPacket map= new MapPacket();
-				map.addObj(1, 3);
-				map.addObj(2, 4);
-				map.addObj(1, 5);
-				map.addObj(3, 3);
-				map.addVictim(3, 1);
-				map.addVictim(2, 5);
-				map.addVictim(5, 5);
 
 				sender = new PCClientSend(sock, map);
 				sender.start();
