@@ -61,9 +61,6 @@ public class ParamedicEnv extends Environment {
 				int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
 				model.addNonCritical(x, y);
-				
-			} else if (action.getFunctor().equals("go_to_hospital")) {
-				model.go_to_hospital();
 			
             } else {
                 logger.info("executing: "+action+", but not implemented!");
@@ -120,15 +117,14 @@ public class ParamedicEnv extends Environment {
 		void move_towards_victim() {
 			System.out.println("Moving Towards Victim");
 			String colour = "cyan";
-			int X = 3;
-			int Y = 2;
-			//addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + X + ", " +Y + " )"));
-			seenVictim("burgandy",2,3);
+			int X = 4;
+			int Y = 5;
+			addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + X + ", " +Y + " )"));
+			seenVictim("cyan",4,5);
 		}
 		
 		void go_to_hospital() {
-			System.out.println("Moving Towards Hospital");
-			addPercept(Literal.parseLiteral("at_hospital"));
+			System.out.println("Moving Towards Hospital");	
 		}
         
         // The JASON GridWorldView assumes that the origin is in the top left

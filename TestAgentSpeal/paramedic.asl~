@@ -89,7 +89,7 @@ plays(initiator,doctor).
     		Vcount, " victimes and ", Ocount," known obstacles");
 	   //.print("We are here now");
 		//-startRescueMission(D,C,NC);
-		!at.
+		+at(victim).
  
 // This is our recursive plan that only executes if we have yet to receive
 // the beliefs    
@@ -135,14 +135,6 @@ plays(initiator,doctor).
     <- .print("The victim at ", X, ",", Y, " is not critical");
 		addNonCritical(X,Y);
 		move_towards_victim.
-		
-		
-+at_hospital: .count(victim_found(_,_,_)) > 3
-	<- pickUpNonCritical;
-		abolish(at_hospital).
-	//<- pickUpNonCritical.
-	
-+at_hospital <- !at.
 
 
 // ========================================================================
@@ -165,7 +157,7 @@ plays(initiator,doctor).
     <- .send(D, tell, requestVictimStatus(X,Y,C)).
 	
 //+!at(Victim) : at(Victim).
-+!at <- move_towards_victim.
++at(victim) <- move_towards_victim.
 				//!at(Victim).
 
 +noVictim(X,Y)
