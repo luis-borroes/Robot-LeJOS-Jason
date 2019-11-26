@@ -2,11 +2,19 @@ import java.io.*;
 import java.net.*;
 
 public class PCClientSend extends Thread {
-	private Socket sock;
 	
-    public PCClientSend(Socket s){
+	private Socket sock;
+	private PCPacket packet;
+	private boolean initPacket;
+	
+    public PCClientSend(Socket s, MapPacket map) {
     	this.setDaemon(true);
     	sock = s;
+    	
+    	initPacket = true;
+    	packet = new PCPacket();
+    	packet.cmd = Type.INIT;
+    	packet.map = map;
     }
 
     public PCPacket update(PCPacket p) {
@@ -32,12 +40,11 @@ public class PCClientSend extends Thread {
 		try {
 			ObjectOutputStream oOut = new ObjectOutputStream(sock.getOutputStream());
 			
-			PCPacket packet = new PCPacket();
-			
 			boolean running = true;
 			
 			while (running) {
-				packet = update(packet);
+				if (!initPacket)
+					packet = update(packet);
 				
     			oOut.reset();
 				oOut.writeObject(packet);

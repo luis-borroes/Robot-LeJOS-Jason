@@ -18,13 +18,18 @@ public class MappingGateway {
 		}
 
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);
-
-		getGridCell(0, 3).setStatus(GridCellStatus.OCCUPIED);
-		getGridCell(1, 2).setStatus(GridCellStatus.OCCUPIED);
-		getGridCell(1, 4).setStatus(GridCellStatus.OCCUPIED);
-		getGridCell(3, 3).setStatus(GridCellStatus.OCCUPIED);
 		
 		pathFinding = new PathFinding(this);
+	}
+	
+	public void load(MapPacket m) {
+		for (int i = 0; i < m.obstacles.size(); i++) {
+			getGridCell(m.obstacles.get(i)).setStatus(GridCellStatus.OCCUPIED);
+		}
+		
+		for (int i = 0; i < m.victims.size(); i++) {
+			getGridCell(m.victims.get(i)).setStatus(GridCellStatus.VICTIM);
+		}
 	}
 	
 	public Coordinate getCurrentPosition() {

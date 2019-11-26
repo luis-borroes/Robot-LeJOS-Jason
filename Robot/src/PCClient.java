@@ -22,8 +22,17 @@ public class PCClient {
 				firstConnError = true;
 				
 				System.out.println("Connected");
+				
+				MapPacket map= new MapPacket();
+				map.addObj(1, 3);
+				map.addObj(2, 4);
+				map.addObj(1, 5);
+				map.addObj(3, 3);
+				map.addVictim(3, 1);
+				map.addVictim(2, 5);
+				map.addVictim(5, 5);
 
-				sender = new PCClientSend(sock);
+				sender = new PCClientSend(sock, map);
 				sender.start();
 				
 				ObjectInputStream oIn = new ObjectInputStream(sock.getInputStream());

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 public class MapPacket implements Serializable {
 	
 	Coordinate size = new Coordinate(6, 7);
-	ArrayList<Coordinate> obstacles = new ArrayList();
-	ArrayList<Coordinate> victims = new ArrayList();
+	ArrayList<Coordinate> obstacles = new ArrayList<Coordinate>();
+	ArrayList<Coordinate> victims = new ArrayList<Coordinate>();
 
 	public MapPacket() {
 		
@@ -15,7 +15,17 @@ public class MapPacket implements Serializable {
 		obstacles.add(coord);
 	}
 	
+	public void addObj(int x, int y) {
+		Coordinate coord = new Coordinate(x, y);
+		obstacles.add(coord);
+	}
+	
 	public void addVictim(Coordinate coord) {
+		victims.add(coord);
+	}
+	
+	public void addVictim(int x, int y) {
+		Coordinate coord = new Coordinate(x, y);
 		victims.add(coord);
 	}
 }
