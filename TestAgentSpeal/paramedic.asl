@@ -123,6 +123,8 @@ plays(initiator,doctor).
 
 +critical(X,Y)
     <- .print("The victim at ", X, ",", Y, " is critical");
+		remove_critical(X,Y);
+		.abolish(location(victim,X,Y));
 		go_to_hospital.
 
 +~critical(X,Y): .count(victim_found(_,_,_)) > 3
@@ -165,16 +167,18 @@ plays(initiator,doctor).
     <- .send(D, tell, requestVictimStatus(X,Y,C)).
 	
 //+!at(Victim) : at(Victim).
+
++!at: .count(victim_found(_,_,_)) > 3
+	<- pickupnoncritical.
+
 +!at <- move_towards_victim.
 				//!at(Victim).
 
 +noVictim(X,Y)
-<- .abolish(location(victim,X,Y));   //-location(victim,X,Y)[source(doctor)];
-.count(location(victim,_,_),Ocount);	// Determine the obstacles
-	.print("THis MAAAAYYYb",Ocount).
+	<- .abolish(location(victim,X,Y)).   //-location(victim,X,Y)[source(doctor)];
 
 +victim_found(C,X,Y)
-	<-!requestVictimStatus(doctor, X, Y, C).
+	<- !requestVictimStatus(doctor, X, Y, C).
 	
 +test(C)
 	<- .send(D,tell,-location(victim,2,3));

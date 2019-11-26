@@ -15,7 +15,7 @@ public class ParamedicEnv extends Environment {
     public static final int GSize = 6; // The bay is a 6x6 grid
     public static final int HOSPITAL  = 8; // hospital code in grid model
     public static final int VICTIM  = 16; // victim code in grid model
-	public static final int NONCRITICAL = 33;
+	public static final int NONCRITICAL = 32;
     private Logger logger = Logger.getLogger("testing"+ParamedicEnv.class.getName());
     
     // Create objects for visualising the bay.  
@@ -65,6 +65,17 @@ public class ParamedicEnv extends Environment {
 			} else if (action.getFunctor().equals("go_to_hospital")) {
 				model.go_to_hospital();
 			
+			} else if (action.getFunctor().equals("remove_critical")) {
+				int x = (int)((NumberTerm)action.getTerm(0)).solve();
+                int y = (int)((NumberTerm)action.getTerm(1)).solve();
+				model.remove_critical(x, y);
+			} else if (action.getFunctor().equals("remove_non_critical")) {
+				int x = (int)((NumberTerm)action.getTerm(0)).solve();
+                int y = (int)((NumberTerm)action.getTerm(1)).solve();
+				model.remove_non_critical(x, y);
+			}else if (action.getFunctor().equals("pickupnoncritical")) {
+				System.out.println("go to non criticals");
+				
             } else {
                 logger.info("executing: "+action+", but not implemented!");
                 return true;
@@ -87,7 +98,7 @@ public class ParamedicEnv extends Environment {
 		if(colour.equals("white")) {
 			//addPercept(Literal.parseLiteral("location(" + "victim" + "," + 4 + "," + 3 + ")"));
 			//informAgsEnvironmentChanged();
-		
+			model.removeVictim(xpos,ypos);
 			addPercept(Literal.parseLiteral("noVictim("+xpos+","+ypos+")"));   //removes belief
 		} else {
 			addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + xpos + ", " + ypos + " )"));
@@ -123,13 +134,16 @@ public class ParamedicEnv extends Environment {
 			int X = 3;
 			int Y = 2;
 			//addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + X + ", " +Y + " )"));
-			seenVictim("burgandy",2,3);
+			seenVictim("white",1,5);
 		}
 		
 		void go_to_hospital() {
 			System.out.println("Moving Towards Hospital");
+			//remove(VICTIM)
 			addPercept(Literal.parseLiteral("at_hospital"));
 		}
+		
+
         
         // The JASON GridWorldView assumes that the origin is in the top left
         // hand corner, but all of the COMP329 descriptions assume 0,0 is in
@@ -144,12 +158,26 @@ public class ParamedicEnv extends Environment {
 			remove(VICTIM, x, invertY(y));
 			add(NONCRITICAL, x, invertY(y));
 			//ParamedicEnv.view.repaint();
+			view.repaint();
+		}
+		
+
+		void remove_critical(int x, int y) {
+			remove(VICTIM, x, invertY(y));
+			view.repaint();
+		}
+		
+				
+		void remove_non_critical(int x, int y) {
+			remove(NONCRITICAL, x, invertY(y));
+			view.repaint();
 		}
 		
 		
 		
         void removeVictim(int x, int y) { 
 			remove(VICTIM, x, invertY(y));
+			view.repaint();
 		}
 		
         void addVictim(int x, int y) {
@@ -183,6 +211,7 @@ public class ParamedicEnv extends Environment {
         /** draw application objects */
         @Override
         public void draw(Graphics g, int x, int y, int object) {
+			//System.out.println(object);
             switch (object) {
             case ParamedicEnv.VICTIM:
                 drawVictim(g, x, y);
@@ -191,7 +220,6 @@ public class ParamedicEnv extends Environment {
                 drawHospital(g, x, y);
                 break;
 			case ParamedicEnv.NONCRITICAL:
-				System.out.println("sdfufvbdksjhvbjshdmfb");
 				drawNonCritical(g, x, y);
 				break;
            }
@@ -205,14 +233,13 @@ public class ParamedicEnv extends Environment {
 
         public void drawHospital(Graphics g, int x, int y) {
             //super.drawObstacle(g, x, y);
-            g.setColor(Color.blue);
+            g.setColor(Color.green);
             drawString(g, x, y, defaultFont, "H");
         }
 		
 		public void drawNonCritical(Graphics g, int x, int y) {
-			System.out.println("hello");
-			g.setColor(Color.green);
-			drawString(g, x, y, defaultFont, "NCV");
+			g.setColor(Color.orange);
+			drawString(g, x, y, defaultFont, ":|");
 		}
     }
     // ======================================================================
