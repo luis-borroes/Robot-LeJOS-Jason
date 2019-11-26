@@ -1,2 +1,4 @@
 /bin/
 *.jar
+/TestAgentSpeal/paramedic.asl~
+/TestAgentSpeal/ParamedicEnv.java~
