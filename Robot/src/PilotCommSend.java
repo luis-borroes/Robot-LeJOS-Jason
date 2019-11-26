@@ -27,6 +27,8 @@ public class PilotCommSend extends Thread {
 		p.left = robot.getLColID();
 		p.right = robot.getRColID();
 		
+		p.pos = robot.getMap().getCurrentPosition();
+		
 		return p;
     }
     

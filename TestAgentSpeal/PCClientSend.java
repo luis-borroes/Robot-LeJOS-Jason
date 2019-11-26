@@ -17,22 +17,15 @@ public class PCClientSend extends Thread {
     	packet.map = map;
     }
 
-    public PCPacket update(PCPacket p) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
-        String coordinates = "";
-      
-        try {
-			coordinates = reader.readLine();
+    public void update(int x, int y) {
+    	if (!initPacket) {
+			packet.id++;
+	        packet.cmd = Type.MOVE;
+	        packet.target.x = x;
+	        packet.target.y = y;
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-        p.cmd = Type.MOVE;
-        p.target.x = Character.getNumericValue(coordinates.charAt(0));
-        p.target.y = Character.getNumericValue(coordinates.charAt(1));
-    	
-    	return p;
+			System.out.println(x + " " + y);
+    	}
     }
     
     public void run(){
@@ -42,16 +35,15 @@ public class PCClientSend extends Thread {
 			
 			boolean running = true;
 			
-			while (running) {
-				if (!initPacket)
-					packet = update(packet);
-				
+			while (running) {				
     			oOut.reset();
 				oOut.writeObject(packet);
     			oOut.flush();
     			
+    			initPacket = false;
+    			
     			try {
-    				Thread.sleep(200);
+    				Thread.sleep(600);
     			} catch (InterruptedException e) {}
 			}
 			

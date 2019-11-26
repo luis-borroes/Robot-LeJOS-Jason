@@ -21,7 +21,11 @@ public class ParamedicEnv extends Environment {
     // Create objects for visualising the bay.  
     // This is based on the Cleaning Robots code.
     private RobotBayModel model;
-    private RobotBayView view;    
+    private RobotBayView view;
+	
+	private MappingGateway map;
+	private MapPacket mPack;
+	private PCClient client;
 
     /** Called before the MAS execution with the args informed in .mas2j */
     @Override
@@ -32,6 +36,8 @@ public class ParamedicEnv extends Environment {
         view  = new RobotBayView(model);
         model.setView(view);
 		
+		map = new MappingGateway(new Coordinate(0, 0));
+		mPack = map.save();
 		
     }
 
@@ -76,6 +82,9 @@ public class ParamedicEnv extends Environment {
 			}else if (action.getFunctor().equals("pickupnoncritical")) {
 				System.out.println("go to non criticals");
 				
+			}else if (action.getFunctor().equals("startserver")) {
+				start_server();
+				
             } else {
                 logger.info("executing: "+action+", but not implemented!");
                 return true;
@@ -95,7 +104,7 @@ public class ParamedicEnv extends Environment {
     }
 	
 	public void seenVictim(String colour, int xpos, int ypos) {
-		if(colour.equals("white")) {
+		if (colour.equals("white")) {
 			//addPercept(Literal.parseLiteral("location(" + "victim" + "," + 4 + "," + 3 + ")"));
 			//informAgsEnvironmentChanged();
 			model.removeVictim(xpos,ypos);
@@ -103,6 +112,16 @@ public class ParamedicEnv extends Environment {
 		} else {
 			addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + xpos + ", " + ypos + " )"));
 		}
+	}
+	
+	public void start_server() {
+		mPack = map.save();
+		client = new PCClient(this, mPack);
+		client.start();
+	}
+	
+	public void connected() {
+		addPercept(Literal.parseLiteral("connected"));
 	}
 
     /** Called before the end of MAS execution */
@@ -130,11 +149,13 @@ public class ParamedicEnv extends Environment {
 		
 		void move_towards_victim() {
 			System.out.println("Moving Towards Victim");
-			String colour = "cyan";
-			int X = 3;
-			int Y = 2;
+			//String colour = "cyan";
+			//int X = 3;
+			//int Y = 2;
 			//addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + X + ", " +Y + " )"));
-			seenVictim("white",1,5);
+			//seenVictim("white",1,5);
+			
+			client.goToNextVictim();
 		}
 		
 		void go_to_hospital() {
@@ -182,12 +203,15 @@ public class ParamedicEnv extends Environment {
 		
         void addVictim(int x, int y) {
             add(VICTIM, x, invertY(y));
+			map.getGridCell(x, y).setStatus(GridCellStatus.VICTIM);
         }
         void addHospital(int x, int y) {
             add(HOSPITAL, x, invertY(y));
+			map.setHospital(x, y);
         }
         void addObstacle(int x, int y) {
             add(OBSTACLE, x, invertY(y));
+			map.getGridCell(x, y).setStatus(GridCellStatus.OCCUPIED);
         }
 
     }

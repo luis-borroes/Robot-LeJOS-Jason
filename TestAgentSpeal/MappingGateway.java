@@ -51,7 +51,7 @@ public class MappingGateway {
 			getGridCell(m.victims.get(i)).setStatus(GridCellStatus.VICTIM);
 		}
 		
-		hospital = m.hospital;
+		setHospital(m.hospital);
 	}
 	
 	public Coordinate getCurrentPosition() {
@@ -83,55 +83,11 @@ public class MappingGateway {
 		hospital = coord;
 	}
 	
-	public Coordinate getNextCell(int heading, int direction) {
-		Coordinate newCoords = new Coordinate(currentPosition);
-		
-		heading += direction;
-		
-		if (heading >= 360)
-			heading -= 360;
-		if (heading < 0)
-			heading += 360;
-
-		switch (heading) {
-			case (PilotRobot.NORTH):
-				newCoords.y += 1;
-				break;
-				
-			case (PilotRobot.EAST):
-				newCoords.x += 1;
-				break;
-			
-			case (PilotRobot.SOUTH):
-				newCoords.y -= 1;
-				break;
-			
-			case (PilotRobot.WEST):
-				newCoords.x -= 1;
-				break;
-			
-			default:
-				break;
-		}
-		
-		return newCoords;
-	}
-	
 	public boolean isWithinBounds(Coordinate coords) {
 		return (coords.x >= 0 &&
 				coords.x < 6 &&
 				coords.y >= 0 &&
 				coords.y < 7);
-	}
-	
-	public boolean isCellBlocked(int heading, int direction) {
-		Coordinate coords = getNextCell(heading, direction);
-		
-		if (!isWithinBounds(coords))
-			return true;
-
-		else
-			return (getGridCell(coords).getStatus() == GridCellStatus.OCCUPIED);
 	}
 	
 	public ArrayList<Integer> getDirections(Coordinate coords) {

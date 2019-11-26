@@ -19,19 +19,26 @@ public class PilotComm extends Thread {
 	private MappingGateway map;
 	private ServerSocket server;
 	
+	private int packetID;
+	
     public PilotComm(PilotRobot r, MappingGateway m){
     	this.setDaemon(true);
     	robot = r;
     	map = m;
+    	packetID = -1;
     }
 
     public void handle(PCPacket p) {
-    	if (p.cmd == Type.MOVE) {
-    		robot.setPath(p.target);
-    	}
-    	
-    	if (p.cmd == Type.INIT) {
-    		map.load(p.map);
+    	if (p.id > packetID) {
+	    	if (p.cmd == Type.MOVE) {
+	    		robot.setPath(p.target);
+	    	}
+	    	
+	    	if (p.cmd == Type.INIT) {
+	    		map.load(p.map);
+	    	}
+	    	
+	    	packetID = p.id;
     	}
     }
     
@@ -53,7 +60,7 @@ public class PilotComm extends Thread {
 						handle(packet);
 						
 		    			try {
-		    				Thread.sleep(200);
+		    				Thread.sleep(50);
 		    			} catch (InterruptedException e) {}
 					}
 					

@@ -1,5 +1,5 @@
 /bin/
 *.jar
-paramedic.asl~
-ParamedicEnv.java~
+*.asl~
+*.java~
 .project

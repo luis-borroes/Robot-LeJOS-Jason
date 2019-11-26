@@ -240,8 +240,8 @@ public class PilotRobot {
 	public void rePath() {
 		path = map.getDirections(target);
 		
-		if (path.size() == 0)
-			nextPath();
+		//if (path.size() == 0)
+			//nextPath();
 	}
 	
 	public void setPathToUnvisited() {

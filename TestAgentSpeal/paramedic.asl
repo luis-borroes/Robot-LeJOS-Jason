@@ -89,8 +89,10 @@ plays(initiator,doctor).
     		Vcount, " victimes and ", Ocount," known obstacles");
 	   //.print("We are here now");
 		//-startRescueMission(D,C,NC);
-		!at.
- 
+		startserver.
+
+		
+
 // This is our recursive plan that only executes if we have yet to receive
 // the beliefs    
 +startRescueMission(D,C,NC)
@@ -174,8 +176,14 @@ plays(initiator,doctor).
 +!at <- move_towards_victim.
 				//!at(Victim).
 
++connected	
+	<-!at.
+ 			
+	
 +noVictim(X,Y)
-	<- .abolish(location(victim,X,Y)).   //-location(victim,X,Y)[source(doctor)];
+	<- .abolish(location(victim,X,Y));
+		.print("hellkvdejrhkjabh");
+		!at. //-location(victim,X,Y)[source(doctor)];
 
 +victim_found(C,X,Y)
 	<- !requestVictimStatus(doctor, X, Y, C).
