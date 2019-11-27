@@ -4,19 +4,15 @@ public class MappingGateway {
 	private GridCell[][] map;
 	private Coordinate currentPosition;
 	private Coordinate hospital;
+	private Coordinate size;
 	private PathFinding pathFinding;
 	
+	private Coordinate[] corners;
+	
 	public MappingGateway(Coordinate initialPos) {
-		map = new GridCell[6][];
 		this.setPosition(initialPos);
 		
-		for (int x = 0; x < 6; x++) {
-			map[x] = new GridCell[7];
-			
-			for (int y = 0; y < 7; y++) {
-				map[x][y] = new GridCell();
-			}
-		}
+		setSize(new Coordinate(6, 7));
 
 		setHospital(0, 0);
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);
@@ -24,11 +20,41 @@ public class MappingGateway {
 		pathFinding = new PathFinding(this);
 	}
 	
+	public void setSize(Coordinate s) {
+		size = s;
+		
+		map = new GridCell[size.x][];
+		
+		for (int x = 0; x < size.x; x++) {
+			map[x] = new GridCell[size.y];
+			
+			for (int y = 0; y < size.y; y++) {
+				map[x][y] = new GridCell();
+			}
+		}
+
+		corners = new Coordinate[4];
+		corners[0] = new Coordinate(0, 0);
+		corners[1] = new Coordinate(size.x - 1, 0);
+		corners[2] = new Coordinate(size.x - 1, size.y - 1);
+		corners[3] = new Coordinate(0, size.y - 1);
+	}
+	
+	public Coordinate getSize() {
+		return size;
+	}
+	
+	public Coordinate[] getCorners() {
+		return corners;
+	}
+	
 	public MapPacket save() {
 		MapPacket m = new MapPacket();
 		
-		for (int x = 0; x < 6; x++) {
-			for (int y = 0; y < 7; y++) {
+		m.size = getSize();
+		
+		for (int x = 0; x < size.x; x++) {
+			for (int y = 0; y < size.y; y++) {
 				if (map[x][y].getStatus() == GridCellStatus.OCCUPIED)
 					m.addObj(x, y);
 				
@@ -43,6 +69,8 @@ public class MappingGateway {
 	}
 	
 	public void load(MapPacket m) {
+		setSize(m.size);
+		
 		for (int i = 0; i < m.obstacles.size(); i++) {
 			getGridCell(m.obstacles.get(i)).setStatus(GridCellStatus.OCCUPIED);
 		}
@@ -51,7 +79,7 @@ public class MappingGateway {
 			getGridCell(m.victims.get(i)).setStatus(GridCellStatus.VICTIM);
 		}
 		
-		setHospital(m.hospital);
+		hospital = m.hospital;
 	}
 	
 	public Coordinate getCurrentPosition() {
@@ -83,11 +111,55 @@ public class MappingGateway {
 		hospital = coord;
 	}
 	
+	public Coordinate getNextCell(int heading, int direction) {
+		Coordinate newCoords = new Coordinate(currentPosition);
+		
+		heading += direction;
+		
+		if (heading >= 360)
+			heading -= 360;
+		if (heading < 0)
+			heading += 360;
+
+		switch (heading) {
+			case (PathFinding.NORTH):
+				newCoords.y += 1;
+				break;
+				
+			case (PathFinding.EAST):
+				newCoords.x += 1;
+				break;
+			
+			case (PathFinding.SOUTH):
+				newCoords.y -= 1;
+				break;
+			
+			case (PathFinding.WEST):
+				newCoords.x -= 1;
+				break;
+			
+			default:
+				break;
+		}
+		
+		return newCoords;
+	}
+	
 	public boolean isWithinBounds(Coordinate coords) {
 		return (coords.x >= 0 &&
-				coords.x < 6 &&
+				coords.x < size.x &&
 				coords.y >= 0 &&
-				coords.y < 7);
+				coords.y < size.y);
+	}
+	
+	public boolean isCellBlocked(int heading, int direction) {
+		Coordinate coords = getNextCell(heading, direction);
+		
+		if (!isWithinBounds(coords))
+			return true;
+
+		else
+			return (getGridCell(coords).getStatus() == GridCellStatus.OCCUPIED);
 	}
 	
 	public ArrayList<Integer> getDirections(Coordinate coords) {
@@ -121,3 +193,4 @@ public class MappingGateway {
 		}
 	}
 }
+

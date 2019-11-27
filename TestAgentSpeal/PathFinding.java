@@ -125,15 +125,17 @@ public class PathFinding implements Serializable {
 	}
 	
 	public void resetVisited() {
-		visited = new boolean[6][];
+		Coordinate size = map.getSize();
 		
-		for (int x = 0; x < 6; x++) {
-			visited[x] = new boolean[7];
+		visited = new boolean[size.x][];
+		
+		for (int x = 0; x < size.x; x++) {
+			visited[x] = new boolean[size.y];
 			
-			for (int y = 0; y < 7; y++) {
+			for (int y = 0; y < size.y; y++) {
 				visited[x][y] = false;
 			}
 		}
 	}
-
+	
 }

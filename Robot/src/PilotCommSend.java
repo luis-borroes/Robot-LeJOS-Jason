@@ -6,21 +6,22 @@ public class PilotCommSend extends Thread {
 
 	public PilotRobot robot;
 	private Socket client;
+	boolean running;
 	
     public PilotCommSend(PilotRobot r, Socket c){
     	this.setDaemon(true);
     	robot = r;
     	client = c;
+    	running = true;
     }
 
     public RobotPacket update(RobotPacket p) {
-    	
     	if (robot.getPath().size() > 0 || (robot.getRotating() || robot.getMoving()))
     		p.st = Status.MOVING;
     	else
     		p.st = Status.WAITING;
     	
-    	if (robot.getCellCounter() > 4)
+    	if (robot.getOdometry())
     		p.st = Status.ODOMETRY;
     	
     	
@@ -32,14 +33,16 @@ public class PilotCommSend extends Thread {
 		return p;
     }
     
+    public void interrupt() {
+    	running = false;
+    }
+    
     public void run(){
     	
 		try {
 			ObjectOutputStream oOut = new ObjectOutputStream(client.getOutputStream());
 			
 			RobotPacket packet = new RobotPacket();
-			
-			boolean running = true;
 			
 			while (running) {
 				packet = update(packet);
@@ -52,12 +55,13 @@ public class PilotCommSend extends Thread {
     				Thread.sleep(200);
     			} catch (InterruptedException e) {}
 			}
-			
-			//server.close();
 		}
 		
-		catch(Exception e) {
+		catch (Exception e) {
 			//System.out.println(e);
+		
+		} finally {
+			
 		}
 		
 		try {

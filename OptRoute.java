@@ -62,7 +62,7 @@ public class ParamedicEnv extends Environment {
 				}
 				
 				else{
-					cost+= calcCost(String astarpath = Astar(direction,.....perms.get(i).get(a-1).charAt(0 a)& a);
+					cost+= calcCost(String astarpath = Astar(direction,.....perms.get(i).get(a-1).charAt(0 a)& a, robot.direction);
 					direction = astapath.charAt(astarpath.length-1);
 				}
 			}
@@ -115,5 +115,5 @@ public class ParamedicEnv extends Environment {
 		return cost;
 		
 	}
-	=====================================================================
+	//=====================================================================
 }

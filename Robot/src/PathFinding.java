@@ -7,6 +7,13 @@ public class PathFinding implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+
+	public static final int NORTH = 0;
+	public static final int EAST = 90;
+	public static final int SOUTH = 180;
+	public static final int WEST = 270;
+	
 	private MappingGateway map;
 	private Coordinate start;
 	private Coordinate current;
@@ -98,10 +105,10 @@ public class PathFinding implements Serializable {
 	public void getAdjNodes(Coordinate node) {
 		
 		Coordinate[] possible = {
-				new Coordinate(node.x - 1, node.y, node, PilotRobot.WEST),
-				new Coordinate(node.x + 1, node.y, node, PilotRobot.EAST),
-				new Coordinate(node.x, node.y - 1, node, PilotRobot.SOUTH),
-				new Coordinate(node.x, node.y + 1, node, PilotRobot.NORTH)
+				new Coordinate(node.x - 1, node.y, node, WEST),
+				new Coordinate(node.x + 1, node.y, node, EAST),
+				new Coordinate(node.x, node.y - 1, node, SOUTH),
+				new Coordinate(node.x, node.y + 1, node, NORTH)
 		};
 		
 		for (int i = 0; i < 4; i++) {
@@ -118,15 +125,17 @@ public class PathFinding implements Serializable {
 	}
 	
 	public void resetVisited() {
-		visited = new boolean[6][];
+		Coordinate size = map.getSize();
 		
-		for (int x = 0; x < 6; x++) {
-			visited[x] = new boolean[7];
+		visited = new boolean[size.x][];
+		
+		for (int x = 0; x < size.x; x++) {
+			visited[x] = new boolean[size.y];
 			
-			for (int y = 0; y < 7; y++) {
+			for (int y = 0; y < size.y; y++) {
 				visited[x][y] = false;
 			}
 		}
 	}
-
+	
 }

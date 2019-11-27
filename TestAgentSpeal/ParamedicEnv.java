@@ -37,6 +37,7 @@ public class ParamedicEnv extends Environment {
         model.setView(view);
 		
 		map = new MappingGateway(new Coordinate(0, 0));
+		map.setSize(new Coordinate(6, 6));
 		mPack = map.save();
 		
     }
@@ -110,6 +111,7 @@ public class ParamedicEnv extends Environment {
 			model.removeVictim(xpos,ypos);
 			addPercept(Literal.parseLiteral("noVictim("+xpos+","+ypos+")"));   //removes belief
 		} else {
+			System.out.println(colour + " " + xpos + " " + ypos);
 			addPercept(Literal.parseLiteral("victim_found(" + colour + ", " + xpos + ", " + ypos + " )"));
 		}
 	}
@@ -118,6 +120,11 @@ public class ParamedicEnv extends Environment {
 		mPack = map.save();
 		client = new PCClient(this, mPack);
 		client.start();
+	}
+	
+	
+	public void at_hospital() {
+		addPercept(Literal.parseLiteral("at_hospital"));
 	}
 	
 	public void connected() {
@@ -159,10 +166,12 @@ public class ParamedicEnv extends Environment {
 		}
 		
 		void go_to_hospital() {
-			System.out.println("Moving Towards Hospital");
-			//remove(VICTIM)
-			addPercept(Literal.parseLiteral("at_hospital"));
+			System.out.println("kejalksrjvnlksdnvlksjdnfvlkjdsfnvlkjndflkjvn");
+			client.goToHospital();
+			//addPercept(Literal.parseLiteral("at_hospital"));
 		}
+		
+
 		
 
         

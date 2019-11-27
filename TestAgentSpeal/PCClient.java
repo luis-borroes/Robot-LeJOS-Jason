@@ -13,6 +13,7 @@ public class PCClient extends Thread {
 	private ArrayList<Coordinate> victims;
 	private int vCounter;
 	private Status oldState;
+	private boolean goingToHospital;
 	
 	public PCClient(ParamedicEnv e, MapPacket m) {
 		map = m;
@@ -23,22 +24,36 @@ public class PCClient extends Thread {
 		victims = map.victims;
 		vCounter = 0;
 		oldState = packet.st;
+		
+		goingToHospital = false;
 	}
 	
 	public void goToNextVictim() {
 		Coordinate victim = victims.get(vCounter);
 		vCounter++;
 		
-		update(victim.x, victim.y);
+		goingToHospital = false;
+		update(victim.x, victim.y, goingToHospital);
+	}
+	
+	public void goToHospital() {
+		System.out.println("Hello");
+		goingToHospital = true;
+		update(map.hospital.x, map.hospital.y, goingToHospital);
 	}
 	
 	public void reached() {
-		env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);
+		if (goingToHospital) {
+			env.at_hospital();
+		
+		} else {
+			env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);
+		}
 	}
 	
-	public void update(int x, int y) {
+	public void update(int x, int y, boolean goingToHospital) {
 		if (sender != null) {
-			sender.update(x, y);
+			sender.update(x, y, goingToHospital);
 		}
 	}
 	

@@ -89,8 +89,11 @@ plays(initiator,doctor).
     		Vcount, " victimes and ", Ocount," known obstacles");
 	   //.print("We are here now");
 		//-startRescueMission(D,C,NC);
-		!at.
- 
+		+startedWith(1);
+		startserver.
+
+		
+
 // This is our recursive plan that only executes if we have yet to receive
 // the beliefs    
 +startRescueMission(D,C,NC)
@@ -123,6 +126,7 @@ plays(initiator,doctor).
 
 +critical(X,Y)
     <- .print("The victim at ", X, ",", Y, " is critical");
+		.print("were have found a critical fucker");
 		remove_critical(X,Y);
 		.abolish(location(victim,X,Y));
 		go_to_hospital.
@@ -168,17 +172,27 @@ plays(initiator,doctor).
 	
 //+!at(Victim) : at(Victim).
 
-+!at: .count(victim_found(_,_,_)) > 3
++!at: .count(victim_found(_,_,_)) > startedWith
 	<- pickupnoncritical.
 
 +!at <- move_towards_victim.
 				//!at(Victim).
 
++connected	
+	<-!at.
+ 			
+	
 +noVictim(X,Y)
-	<- .abolish(location(victim,X,Y)).   //-location(victim,X,Y)[source(doctor)];
+	<- .abolish(location(victim,X,Y));
+		.print("hellkvdejrhkjabh");
+		!at. //-location(victim,X,Y)[source(doctor)];
+		
++victim_found(C,X,Y): 3 > startedWith
+	<- .print("worked")
 
 +victim_found(C,X,Y)
-	<- !requestVictimStatus(doctor, X, Y, C).
+	<- .print("didnt work"); 
+		!requestVictimStatus(doctor, X, Y, C).
 	
 +test(C)
 	<- .send(D,tell,-location(victim,2,3));

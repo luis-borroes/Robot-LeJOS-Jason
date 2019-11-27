@@ -20,7 +20,17 @@ public class Avoid implements Behavior {
 	
 	// When called, determine if this behaviour should start
 	public boolean takeControl(){
-		return (me.getDistance() < .10 && !me.getRotating() && me.getPath().size() > 0);
+		return (me.getDistance() < 1 && !me.getRotating() && me.getPath().size() > 0);
+	}
+	
+	public void move(double dist) {
+	    if (!suppressed)
+	    	pilot.travel(dist, true);
+		
+	    while(pilot.isMoving() && !suppressed) {
+	    	me.update(true, 0);
+	        Thread.yield();
+	    }
 	}
 	
 	public void rotate() {
@@ -41,16 +51,7 @@ public class Avoid implements Behavior {
 		
 		pilot.stop();
 		
-		//Coordinate cellAhead = me.getMap().getNextCell(me.getHeading(), PilotRobot.FORWARD);
-		//me.getMap().updateCell(cellAhead, true);
-		
-		me.rePath();
-		
-		if (me.getPath().size() > 0)
-			me.rotateTowards(me.getPath().get(0));
-		
-		rotate();
-		me.stopRotating();
+		move(-1);
 	}
 
 }

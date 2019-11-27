@@ -63,5 +63,5 @@ public class ColorIdentifier {
 }
 
 enum Color {
-	YELLOW, RED, CYAN, GREEN, BURGUNDY, WHITE, BLACK
+	YELLOW, RED, CYAN, GREEN, BURGANDY, WHITE, BLACK
 }

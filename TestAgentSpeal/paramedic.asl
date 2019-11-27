@@ -89,6 +89,7 @@ plays(initiator,doctor).
     		Vcount, " victimes and ", Ocount," known obstacles");
 	   //.print("We are here now");
 		//-startRescueMission(D,C,NC);
+		+startedWith(Vcount);
 		startserver.
 
 		
@@ -125,6 +126,7 @@ plays(initiator,doctor).
 
 +critical(X,Y)
     <- .print("The victim at ", X, ",", Y, " is critical");
+		.print("were have found a critical fucker");
 		remove_critical(X,Y);
 		.abolish(location(victim,X,Y));
 		go_to_hospital.
@@ -141,12 +143,14 @@ plays(initiator,doctor).
 		move_towards_victim.
 		
 		
-+at_hospital: .count(victim_found(_,_,_)) > 3
++at_hospital: startedWith(X) & .count(victim_found) >= X
 	<- pickUpNonCritical;
 		abolish(at_hospital).
 	//<- pickUpNonCritical.
 	
-+at_hospital <- !at.
++at_hospital 
+	<- !at;
+		abolish(at_hospital).
 
 
 // ========================================================================
@@ -170,7 +174,7 @@ plays(initiator,doctor).
 	
 //+!at(Victim) : at(Victim).
 
-+!at: .count(victim_found(_,_,_)) > 3
++!at: .count(victim_found(_,_,_)) > startedWith
 	<- pickupnoncritical.
 
 +!at <- move_towards_victim.
@@ -185,8 +189,14 @@ plays(initiator,doctor).
 		.print("hellkvdejrhkjabh");
 		!at. //-location(victim,X,Y)[source(doctor)];
 
+		
+		
+//+victim_found(C,X,Y): startedWith(X) & ( .count(victim_found) >= X)
+//	<- .print("Go to hospital")
+
 +victim_found(C,X,Y)
-	<- !requestVictimStatus(doctor, X, Y, C).
+	<- .print("didnt work"); 
+		!requestVictimStatus(doctor, X, Y, C).
 	
 +test(C)
 	<- .send(D,tell,-location(victim,2,3));

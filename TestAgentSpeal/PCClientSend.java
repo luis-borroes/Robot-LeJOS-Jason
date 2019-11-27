@@ -17,12 +17,19 @@ public class PCClientSend extends Thread {
     	packet.map = map;
     }
 
-    public void update(int x, int y) {
+    public void update(int x, int y, boolean goingToHospital) {
     	if (!initPacket) {
 			packet.id++;
 	        packet.cmd = Type.MOVE;
 	        packet.target.x = x;
 	        packet.target.y = y;
+			
+			if (goingToHospital) {
+				packet.ambulance = true;
+				
+			} else {
+				packet.ambulance = false;
+			}
 			
 			System.out.println(x + " " + y);
     	}
@@ -39,11 +46,13 @@ public class PCClientSend extends Thread {
     			oOut.reset();
 				oOut.writeObject(packet);
     			oOut.flush();
+				
+				System.out.println(packet.id + " " + packet.target.x + " " + packet.target.y);
     			
     			initPacket = false;
     			
     			try {
-    				Thread.sleep(600);
+    				Thread.sleep(1500);
     			} catch (InterruptedException e) {}
 			}
 			

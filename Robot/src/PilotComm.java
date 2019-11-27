@@ -18,6 +18,7 @@ public class PilotComm extends Thread {
 	public PilotRobot robot;
 	private MappingGateway map;
 	private ServerSocket server;
+	private PilotCommSend sender;
 	
 	private int packetID;
 	
@@ -38,6 +39,13 @@ public class PilotComm extends Thread {
 	    		map.load(p.map);
 	    	}
 	    	
+	    	if (p.ambulance) {
+	    		robot.startAmbulance();
+	    		
+	    	} else {
+	    		robot.stopAmbulance();
+	    	}
+	    	
 	    	packetID = p.id;
     	}
     }
@@ -49,23 +57,18 @@ public class PilotComm extends Thread {
 				server = new ServerSocket(port);
 				Socket client = server.accept();
 				
-				PilotCommSend sender = new PilotCommSend(robot, client);
+				sender = new PilotCommSend(robot, client);
 				sender.start();
 				
 				ObjectInputStream oIn = new ObjectInputStream(client.getInputStream());
 				
-				try {
-					while (true) {
-						PCPacket packet = (PCPacket) oIn.readObject();
-						handle(packet);
-						
-		    			try {
-		    				Thread.sleep(50);
-		    			} catch (InterruptedException e) {}
-					}
+				while (true) {
+					PCPacket packet = (PCPacket) oIn.readObject();
+					handle(packet);
 					
-				} catch (Exception e) {
-					System.out.println("Error: " + e);
+	    			try {
+	    				Thread.sleep(50);
+	    			} catch (InterruptedException e) {}
 				}
 			}
 			
@@ -75,7 +78,9 @@ public class PilotComm extends Thread {
 			
 			finally {
 				try {
+					robot.resetRobot(PilotRobot.NORTH);
 					server.close();
+					sender.interrupt();
 					
 				} catch (IOException e) {
 					e.printStackTrace();

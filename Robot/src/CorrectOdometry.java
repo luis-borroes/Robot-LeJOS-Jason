@@ -9,13 +9,6 @@ public class CorrectOdometry implements Behavior {
 	private MovePilot pilot;
 	
 	private int rotateCounter;
-	
-	private Coordinate[] corners = {
-			new Coordinate(0, 0),
-			new Coordinate(5, 0),
-			new Coordinate(5, 6),
-			new Coordinate(0, 6)
-	};
 
     public CorrectOdometry(PilotRobot robot){
     	 me = robot;
@@ -33,6 +26,8 @@ public class CorrectOdometry implements Behavior {
 	}
 	
 	public boolean notInCorner() {
+		Coordinate[] corners = me.getMap().getCorners();
+		
 		for (int i = 0; i < corners.length; i++) {
 			if (me.getMap().getCurrentPosition().getHash() == corners[i].getHash())
 				return false;
@@ -110,6 +105,8 @@ public class CorrectOdometry implements Behavior {
 	public void action() {
 		// Allow this method to run
 		suppressed = false;
+		
+		me.startOdometry();
 
 	    pilot.setLinearSpeed(5);
 	    pilot.forward();

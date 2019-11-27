@@ -29,12 +29,14 @@ public class PilotMonitor extends Thread {
     public void drawTextMap() {
     	String current;
     	
+    	Coordinate size = map.getSize();
+    	
 		lcd.drawString("========", MAP_X, 20, 0);
     	
-    	for (int y = 0; y < 7; y++) {
+    	for (int y = 0; y < size.y; y++) {
     		current = "=";
     		
-    		for (int x = 0; x < 6; x++) {
+    		for (int x = 0; x < size.x; x++) {
     			
     			if (x == map.getX() && y == map.getY()) {
     				
@@ -82,25 +84,27 @@ public class PilotMonitor extends Thread {
     		
     		current += "=";
     		
-    		lcd.drawString(current, MAP_X, 90 - (y * 10), 0);
+    		lcd.drawString(current, MAP_X, 20 + (size.y * 10) - (y * 10), 0);
     	}
     	
-		lcd.drawString("========", MAP_X, 100, 0);
+		lcd.drawString("========", MAP_X, 30 + (size.y * 10), 0);
     }
     
     public void drawShapeMap() {
     	char current = '?';
     	
+    	Coordinate size = map.getSize();
+    	
         lcd.setStrokeStyle(GraphicsLCD.SOLID);
 
 		lcd.fillRect(MAP_X, 20, 80, 10);
-		lcd.fillRect(MAP_X, 30, 10, 70);
-		lcd.fillRect(MAP_X + 70, 30, 10, 70);
-		lcd.fillRect(MAP_X, 100, 80, 10);
+		lcd.fillRect(MAP_X, 30, 10, size.y * 10);
+		lcd.fillRect(MAP_X + 70, 30, 10, size.y * 10);
+		lcd.fillRect(MAP_X, 30 + (size.y * 10), 80, 10);
     	
-    	for (int y = 0; y < 7; y++) {
+    	for (int y = 0; y < size.y; y++) {
     		
-    		for (int x = 0; x < 6; x++) {
+    		for (int x = 0; x < size.x; x++) {
     			
     			if (x == map.getX() && y == map.getY()) {
     				
@@ -126,29 +130,29 @@ public class PilotMonitor extends Thread {
     						break;
     				}
     				
-    				lcd.drawChar(current, MAP_X + x * 10 + 12, y * (-10) + 92, 0);
+    				lcd.drawChar(current, MAP_X + x * 10 + 12, y * (-10) + 22 + (size.y * 10), 0);
     				
     			} else {
 	    			GridCellStatus cellState = map.getGridCell(x, y).getStatus();
 	    			
 	    			if (cellState == GridCellStatus.OCCUPIED) {
 	    		        lcd.setStrokeStyle(GraphicsLCD.SOLID);
-	    				lcd.fillRect(MAP_X + x * 10 + 10, y * (-10) + 90, 10, 10);
+	    				lcd.fillRect(MAP_X + x * 10 + 10, y * (-10) + 20 + (size.y * 10), 10, 10);
 	    			
 	    			} else if (cellState == GridCellStatus.UNCERTAIN) {
 	    		        lcd.setStrokeStyle(GraphicsLCD.SOLID);
-	    				lcd.drawRect(MAP_X + x * 10 + 11, y * (-10) + 91, 8, 8);
+	    				lcd.drawRect(MAP_X + x * 10 + 11, y * (-10) + 21 + (size.y * 10), 8, 8);
 		    			
 	    			} else if (cellState == GridCellStatus.VICTIM) {
 	    		        lcd.setStrokeStyle(GraphicsLCD.DOTTED);
-	    				lcd.drawRect(MAP_X + x * 10 + 13, y * (-10) + 93, 4, 4);
+	    				lcd.drawRect(MAP_X + x * 10 + 13, y * (-10) + 23 + (size.y * 10), 4, 4);
 	    			
 	    			} else if (cellState == GridCellStatus.UNOCCUPIED) {
 	    				//do nothing
 	        			
 	    			} else {
 	    		        lcd.setStrokeStyle(GraphicsLCD.DOTTED);
-	    				lcd.drawRect(MAP_X + x * 10 + 13, y * (-10) + 93, 4, 4);
+	    				lcd.drawRect(MAP_X + x * 10 + 13, y * (-10) + 23 + (size.y * 10), 4, 4);
 	    			}
     			}
     		}
@@ -158,16 +162,18 @@ public class PilotMonitor extends Thread {
     public void drawProbabilityMap() {
     	char current = '?';
     	
+    	Coordinate size = map.getSize();
+    	
         lcd.setStrokeStyle(GraphicsLCD.SOLID);
 
 		lcd.fillRect(MAP_X + 15, 20, 130, 10);
-		lcd.fillRect(MAP_X + 15, 30, 10, 70);
-		lcd.fillRect(MAP_X + 135, 30, 10, 70);
-		lcd.fillRect(MAP_X + 15, 100, 130, 10);
+		lcd.fillRect(MAP_X + 15, 30, 10, size.y * 10);
+		lcd.fillRect(MAP_X + 135, 30, 10, size.y * 10);
+		lcd.fillRect(MAP_X + 15, 30 + (size.y * 10), 130, 10);
     	
-    	for (int y = 0; y < 7; y++) {
+    	for (int y = 0; y < size.y; y++) {
     		
-    		for (int x = 0; x < 6; x++) {
+    		for (int x = 0; x < size.x; x++) {
     			
     			if (x == map.getX() && y == map.getY()) {
     				
@@ -193,7 +199,7 @@ public class PilotMonitor extends Thread {
     						break;
     				}
     				
-    				lcd.drawChar(current, MAP_X + x * 18 + 32, y * (-10) + 92, 0);
+    				lcd.drawChar(current, MAP_X + x * 18 + 32, y * (-10) + 22 + (size.y * 10), 0);
     				
     			} else {
     				
@@ -201,7 +207,7 @@ public class PilotMonitor extends Thread {
 	    			
 	    			if (cellProb != -1) {
 	    		        df.setMaximumFractionDigits(1);
-	    				lcd.drawString(df.format(cellProb), MAP_X + x * 18 + 28, y * (-10) + 92, 0);
+	    				lcd.drawString(df.format(cellProb), MAP_X + x * 18 + 28, y * (-10) + 22 + (size.y * 10), 0);
 	    			}
     			}
     		}
@@ -245,57 +251,59 @@ public class PilotMonitor extends Thread {
     }
     
     public void run(){
-    	try {
-	    	while (true) {
-	    		lcd.clear();
-	    		lcd.setFont(Font.getDefaultFont());
-	    		lcd.drawString("Robot Monitor", lcd.getWidth()/2, 0, GraphicsLCD.HCENTER);
-	    		lcd.setFont(Font.getSmallFont());
-	    		
-	    		switch (mapID) {
-		    		case 0:
-			    		drawTextMap();
-			    		drawInfo();
-			    		break;
-			    		
-		    		case 1:
-		    			drawShapeMap();
-			    		drawInfo();
-			    		break;
-			    		
-		    		case 2:
-		    			drawProbabilityMap();
-			    		break;
-	    		}
-	    		
+    	//try {
+    	
+    	while (true) {
+    		lcd.clear();
+    		lcd.setFont(Font.getDefaultFont());
+    		lcd.drawString("Robot Monitor", lcd.getWidth()/2, 0, GraphicsLCD.HCENTER);
+    		lcd.setFont(Font.getSmallFont());
+    		
+    		switch (mapID) {
+	    		case 0:
+		    		drawTextMap();
+		    		drawInfo();
+		    		break;
+		    		
+	    		case 1:
+	    			drawShapeMap();
+		    		drawInfo();
+		    		break;
+		    		
+	    		case 2:
+	    			drawProbabilityMap();
+		    		break;
+    		}
+    		
 
-	    		if (Button.ESCAPE.isDown()) {
-	    			System.exit(0);
-	    		}
-	    		
-	    		if (Button.RIGHT.isDown()) {
-	    			mapID++;
-	    			
-	    			if (mapID > 2)
-	    				mapID = 0;
-	    			
-	    		} else if (Button.LEFT.isDown()) {
-	    			mapID--;
-	    			
-	    			if (mapID < 0)
-	    				mapID = 2;
-	    		}
-	    		
-	
-	    		try{
-	    			sleep(delay);
-	    		}
-	    		catch (Exception e){}
-		    }
+    		if (Button.ESCAPE.isDown()) {
+    			System.exit(0);
+    		}
+    		
+    		if (Button.RIGHT.isDown()) {
+    			mapID++;
+    			
+    			if (mapID > 2)
+    				mapID = 0;
+    			
+    		} else if (Button.LEFT.isDown()) {
+    			mapID--;
+    			
+    			if (mapID < 0)
+    				mapID = 2;
+    		}
+    		
+
+    		try{
+    			sleep(delay);
+    		}
+    		catch (Exception e){}
+	    }
 	    	
-    	} catch (Exception e) {
-    		run();
-    	}
+    	//} catch (Exception e) {
+    		//run();
+    		
+    	//}
     }
     
 

@@ -56,7 +56,7 @@ public class MoveTowards implements Behavior {
 		rotate();
 		me.stopRotating();
 		
-		move(26);
+		move(25.5);
 	    me.stopMoving();
 	}
 

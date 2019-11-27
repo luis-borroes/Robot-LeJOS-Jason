@@ -5,7 +5,7 @@ import lejos.hardware.BrickFinder;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.EV3IRSensor;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MedianFilter;
 import lejos.robotics.chassis.Chassis;
@@ -13,6 +13,7 @@ import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 import lejos.hardware.Sound;
+import lejos.internal.ev3.EV3LED;
 
 
 public class PilotRobot {
@@ -26,11 +27,12 @@ public class PilotRobot {
 	public static final int FORWARD = 0;
 	
 	private EV3ColorSensor leftColor, rightColor;	
-	private EV3UltrasonicSensor usSensor;
+	private EV3IRSensor usSensor;
 	private EV3GyroSensor gSensor;
 	private SampleProvider leftSP, rightSP, distSP, gyroSP, filterSP;
 	private float[] leftSample, rightSample, distSample, angleSample; 
 	private MovePilot pilot;
+	private EV3LED led;
 	private MappingGateway map;
 	private ColorIdentifier colID = new ColorIdentifier();
 	
@@ -38,6 +40,7 @@ public class PilotRobot {
 	private float assumedAngle;
 	private boolean rotating;
 	private boolean moving;
+	private boolean isOnOdometry;
 	private boolean isOverLine;
 	private int cellCounter;
 	private int pathCounter;
@@ -51,7 +54,7 @@ public class PilotRobot {
 
 		leftColor = new EV3ColorSensor(myEV3.getPort("S1"));
 		rightColor = new EV3ColorSensor(myEV3.getPort("S4"));
-		usSensor = new EV3UltrasonicSensor(myEV3.getPort("S3"));
+		usSensor = new EV3IRSensor(myEV3.getPort("S3"));
 		gSensor = new EV3GyroSensor(myEV3.getPort("S2"));
 
 		rightSP = rightColor.getRGBMode();
@@ -81,23 +84,29 @@ public class PilotRobot {
 	    pilot.setLinearSpeed(20);
 	    pilot.setAngularAcceleration(50);
 	    
+	    led = new EV3LED();
+	    
 	    map = m;
-	    heading = h;
 
-		assumedAngle = 0;
-		rotating = false;
-		moving = false;
-		isOverLine = false;
-		cellCounter = 0;
-		pathCounter = 0;
-		
-		done = false;
+	    resetRobot(h);
 		
 		target = map.getCurrentPosition();
 		path = map.getDirections(target);
 	    
 		// Reset the value of the gyroscope to zero
 		gSensor.reset();
+	}
+	
+	public void resetRobot(int h) {
+	    heading = h;
+		assumedAngle = 0;
+		rotating = false;
+		moving = false;
+		isOnOdometry = false;
+		isOverLine = false;
+		cellCounter = 0;
+		pathCounter = 0;
+		done = false;
 	}
 	
 	public void closeRobot() {
@@ -175,6 +184,18 @@ public class PilotRobot {
 		moving = false;
 	}
 	
+	public void startOdometry() {
+		isOnOdometry = true;
+	}
+	
+	public void stopOdometry() {
+		isOnOdometry = false;
+	}
+	
+	public boolean getOdometry() {
+		return isOnOdometry;
+	}
+	
 	public MovePilot getPilot() {
 		return pilot;
 	}
@@ -200,6 +221,8 @@ public class PilotRobot {
 			cellCounter = 4;
 		else
 			cellCounter = 0;
+		
+		stopOdometry();
 	}
 	
 	public int getPathCounter() {
@@ -279,6 +302,22 @@ public class PilotRobot {
 			heading += 360;
 
 		rotating = true;
+	}
+	
+	public void startAmbulance() {
+		led.setPattern(2, 1);
+		Sound.playTone(220, 500);
+		Sound.playTone(293, 500);
+		Sound.playTone(220, 500);
+		Sound.playTone(293, 500);
+		Sound.playTone(220, 500);
+		Sound.playTone(293, 500);
+		Sound.playTone(220, 500);
+		Sound.playTone(293, 500);
+	}
+	
+	public void stopAmbulance() {
+		led.setPattern(0);
 	}
 	
 	public void cross() {

@@ -5,6 +5,7 @@ public class PCPacket implements Serializable {
 	int id = 0;
 	Type cmd = Type.NONE;
 	Coordinate target = new Coordinate(0, 0);
+	boolean ambulance = false;
 	
 	MapPacket map = new MapPacket();
 
