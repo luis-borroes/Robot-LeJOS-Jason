@@ -108,7 +108,7 @@ public class CorrectOdometry implements Behavior {
 		
 		me.startOdometry();
 
-	    pilot.setLinearSpeed(5);
+	    pilot.setLinearSpeed(4.5);
 	    pilot.forward();
 	    pilot.setLinearAcceleration(100);
 	    

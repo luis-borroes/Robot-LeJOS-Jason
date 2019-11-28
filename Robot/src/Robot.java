@@ -21,16 +21,17 @@ public class Robot {
 		PilotRobot me = new PilotRobot(map, heading);		
 		PilotMonitor myMonitor = new PilotMonitor(me, map, 400);	
 		PilotComm comm = new PilotComm(me, map);
+		PilotSound sound = new PilotSound(me);
 
 		// Set up the behaviours for the Arbitrator and construct it.
-		Behavior avoid = new Avoid(me);
+		//Behavior avoid = new Avoid(me);
 		//Behavior plan = new Plan(me);
 		Behavior moveTowards = new MoveTowards(me);
 		Behavior correctOdometry = new CorrectOdometry(me);
 		Behavior finish = new Finish(me);
 		//Behavior calibrate = new Calibrate(me);
 
-		Behavior [] bArray = {moveTowards, correctOdometry, avoid, finish};
+		Behavior [] bArray = {moveTowards, correctOdometry, finish};
 		//Behavior [] bArray = {plan, moveTowards, correctOdometry, avoid, finish};
 		//Behavior [] bArray = {calibrate};
 		
@@ -47,6 +48,8 @@ public class Robot {
 		
 		// Start the Communicator
 		comm.start();
+		
+		sound.start();
 		
 		try {
 			Thread.sleep(1000);

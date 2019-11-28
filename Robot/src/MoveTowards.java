@@ -56,8 +56,11 @@ public class MoveTowards implements Behavior {
 		rotate();
 		me.stopRotating();
 		
-		move(25.5);
+		move(25.2);
 	    me.stopMoving();
+	    
+		me.getMap().setPosition(me.getMap().getNextCell(me.getHeading(), PilotRobot.FORWARD));
+		me.incCellCounter();
 	}
 
 }

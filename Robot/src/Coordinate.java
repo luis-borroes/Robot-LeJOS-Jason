@@ -38,7 +38,7 @@ public class Coordinate implements Serializable {
 		double turnCost = 0;
 		
 		if (parent.getDirection() != direction)
-			turnCost = 1.5;
+			turnCost = 2;
 		
 		double gn = Math.abs(x - start.x) + Math.abs(y - start.y) + turnCost; //manhattan distance for cost to node + cost for turns
 		//double hn = Math.sqrt(Math.pow(goal.x - x, 2) + Math.pow(goal.y - y, 2)); //euclidian distance for heuristic from node to goal

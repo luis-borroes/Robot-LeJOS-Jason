@@ -42,6 +42,7 @@ public class PilotRobot {
 	private boolean moving;
 	private boolean isOnOdometry;
 	private boolean isOverLine;
+	private boolean isAmbulance;
 	private int cellCounter;
 	private int pathCounter;
 	private Coordinate target;
@@ -104,6 +105,7 @@ public class PilotRobot {
 		moving = false;
 		isOnOdometry = false;
 		isOverLine = false;
+		isAmbulance = false;
 		cellCounter = 0;
 		pathCounter = 0;
 		done = false;
@@ -212,6 +214,10 @@ public class PilotRobot {
 		return map;
 	}
 	
+	public void incCellCounter() {
+		cellCounter++;
+	}
+	
 	public int getCellCounter() {
 		return cellCounter;
 	}
@@ -305,24 +311,22 @@ public class PilotRobot {
 	}
 	
 	public void startAmbulance() {
+		isAmbulance = true;
 		led.setPattern(2, 1);
-		Sound.playTone(220, 500);
-		Sound.playTone(293, 500);
-		Sound.playTone(220, 500);
-		Sound.playTone(293, 500);
-		Sound.playTone(220, 500);
-		Sound.playTone(293, 500);
-		Sound.playTone(220, 500);
-		Sound.playTone(293, 500);
 	}
 	
 	public void stopAmbulance() {
+		isAmbulance = false;
 		led.setPattern(0);
 	}
 	
+	public boolean getAmbulance() {
+		return isAmbulance;
+	}
+	
 	public void cross() {
-		map.setPosition(map.getNextCell(heading, PilotRobot.FORWARD));
-		cellCounter++;
+		//map.setPosition(map.getNextCell(heading, PilotRobot.FORWARD));
+		//cellCounter++;
 		Sound.beep();
 	}
 
