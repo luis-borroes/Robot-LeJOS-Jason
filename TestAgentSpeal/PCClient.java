@@ -12,8 +12,11 @@ public class PCClient extends Thread {
 	
 	private ArrayList<Coordinate> victims;
 	private int vCounter;
+	private int NCvcounter;
 	private Status oldState;
 	private boolean goingToHospital;
+	//ADDED THIS
+	private ArrayList<Coordinate> non_criticals = new ArrayList<Coordinate>();
 	
 	public PCClient(ParamedicEnv e, MapPacket m) {
 		map = m;
@@ -23,15 +26,32 @@ public class PCClient extends Thread {
 		
 		victims = map.victims;
 		vCounter = 0;
+		NCvcounter = 0;
 		oldState = packet.st;
 		
 		goingToHospital = false;
 	}
+
+	
+	//THIS IS ALL CAMERONS CODE REMOVE THIS SHIT IF STUFF STARTS TO BREAK!!!!!
+	public void add_non_critical(int x, int y) {
+		Coordinate toadd = new Coordinate(x,y);
+		non_criticals.add(toadd);
+	}
+
+	public void go_to_noncriticals() {
+		Coordinate victim = non_criticals.get(NCvcounter);
+		NCvcounter++;
+		
+		goingToHospital = false;
+		update(victim.x, victim.y, goingToHospital);
+	}
+	//END OF MY ADDED CODE
 	
 	public void goToNextVictim() {
 		Coordinate victim = victims.get(vCounter);
 		vCounter++;
-		
+		System.out.println("going to victim java");
 		goingToHospital = false;
 		update(victim.x, victim.y, goingToHospital);
 	}
@@ -45,6 +65,7 @@ public class PCClient extends Thread {
 	public void reached() {
 		if (goingToHospital) {
 			env.at_hospital();
+			goingToHospital = false;
 		
 		} else {
 			env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);

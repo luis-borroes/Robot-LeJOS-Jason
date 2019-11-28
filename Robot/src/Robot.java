@@ -57,5 +57,7 @@ public class Robot {
         
         // Start the Arbitrator
 		arby.go();
+
+		sound.ready();
 	}
 }

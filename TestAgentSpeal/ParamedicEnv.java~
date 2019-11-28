@@ -37,6 +37,7 @@ public class ParamedicEnv extends Environment {
         model.setView(view);
 		
 		map = new MappingGateway(new Coordinate(0, 0));
+		map.setSize(new Coordinate(6, 6));
 		mPack = map.save();
 		
     }

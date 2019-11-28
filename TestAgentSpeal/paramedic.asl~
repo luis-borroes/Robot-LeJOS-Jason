@@ -89,7 +89,7 @@ plays(initiator,doctor).
     		Vcount, " victimes and ", Ocount," known obstacles");
 	   //.print("We are here now");
 		//-startRescueMission(D,C,NC);
-		+startedWith(1);
+		+startedWith(Vcount);
 		startserver.
 
 		
@@ -143,12 +143,14 @@ plays(initiator,doctor).
 		move_towards_victim.
 		
 		
-+at_hospital: .count(victim_found(_,_,_)) > 3
++at_hospital: startedWith(X) & .count(victim_found) >= X
 	<- pickUpNonCritical;
 		abolish(at_hospital).
 	//<- pickUpNonCritical.
 	
-+at_hospital <- !at.
++at_hospital 
+	<- !at;
+		abolish(at_hospital).
 
 
 // ========================================================================
@@ -186,9 +188,11 @@ plays(initiator,doctor).
 	<- .abolish(location(victim,X,Y));
 		.print("hellkvdejrhkjabh");
 		!at. //-location(victim,X,Y)[source(doctor)];
+
 		
-+victim_found(C,X,Y): 3 > startedWith
-	<- .print("worked")
+		
+//+victim_found(C,X,Y): startedWith(X) & ( .count(victim_found) >= X)
+//	<- .print("Go to hospital")
 
 +victim_found(C,X,Y)
 	<- .print("didnt work"); 
