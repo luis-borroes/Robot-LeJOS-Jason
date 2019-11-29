@@ -151,7 +151,7 @@ plays(initiator,doctor).
 		
 +at_hospital(X): .count(victim_found(_,_,_)) > 2
 	<-.abolish(at_hospital); 
-	pickUpNonCritical.
+	pickupnoncritical.
 		
 	//<- pickUpNonCritical.
 	
@@ -209,6 +209,10 @@ plays(initiator,doctor).
 +victim_found(C,X,Y)
 	<- .print("didnt work"); 
 		!requestVictimStatus(doctor, X, Y, C).
+		
++at_non_critical(X,Y)
+	<- .print("at non crit"); 
+		go_to_hospital.
 	
 +test(C)
 	<- .send(D,tell,-location(victim,2,3));

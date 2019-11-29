@@ -14,7 +14,8 @@ public class PCClient extends Thread {
 	private int vCounter;
 	private int NCvcounter;
 	private Status oldState;
-	private boolean goingToHospital;
+	private GoingTo goal;
+
 	//ADDED THIS
 	private ArrayList<Coordinate> non_criticals = new ArrayList<Coordinate>();
 	
@@ -29,7 +30,7 @@ public class PCClient extends Thread {
 		NCvcounter = 0;
 		oldState = packet.st;
 		
-		goingToHospital = false;
+		goal = GoingTo.NOWHERE;
 	}
 
 	
@@ -43,8 +44,9 @@ public class PCClient extends Thread {
 		Coordinate victim = non_criticals.get(NCvcounter);
 		NCvcounter++;
 		
-		goingToHospital = false;
-		update(victim.x, victim.y, goingToHospital);
+		goal = GoingTo.NON_CRITICAL;
+		
+		update(victim.x, victim.y);
 	}
 	//END OF MY ADDED CODE
 	
@@ -52,29 +54,41 @@ public class PCClient extends Thread {
 		Coordinate victim = victims.get(vCounter);
 		vCounter++;
 		System.out.println("going to victim java");
-		goingToHospital = false;
-		update(victim.x, victim.y, goingToHospital);
+
+		goal = GoingTo.VICTIM;
+
+		update(victim.x, victim.y);
 	}
 	
 	public void goToHospital() {
 		System.out.println("Hello");
-		goingToHospital = true;
-		update(map.hospital.x, map.hospital.y, goingToHospital);
+
+		goal = GoingTo.HOSPITAL;
+
+		update(map.hospital.x, map.hospital.y);
 	}
 	
 	public void reached() {
-		if (goingToHospital) {
+		if (toHospital()) {
 			env.at_hospital();
-			goingToHospital = false;
+
+		} else if (goal == GoingTo.NON_CRITICAL) {
+			env.at_non_critical(packet.pos.x, packet.pos.y);
 		
 		} else {
 			env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);
 		}
+
+		goal = GoingTo.NOWHERE;
+	}
+
+	public boolean toHospital() {
+		return (goal == GoingTo.HOSPITAL);
 	}
 	
-	public void update(int x, int y, boolean goingToHospital) {
+	public void update(int x, int y) {
 		if (sender != null) {
-			sender.update(x, y, goingToHospital);
+			sender.update(x, y, toHospital());
 		}
 	}
 	
@@ -135,4 +149,8 @@ public class PCClient extends Thread {
 			} catch (InterruptedException e) {}
 		}
 	}
+}
+
+enum GoingTo {
+	NOWHERE, VICTIM, HOSPITAL, NON_CRITICAL
 }

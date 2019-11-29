@@ -138,6 +138,12 @@ public class ParamedicEnv extends Environment {
 		counter++;
 	}
 	
+	public void at_non_critical(int xpos, int ypos) {
+		
+		addPercept("paramedic",Literal.parseLiteral("at_non_critical(" + xpos + "," + ypos +")"));
+
+	}
+	
 	public void connected() {
 		addPercept(Literal.parseLiteral("connected"));
 	}
