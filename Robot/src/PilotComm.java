@@ -39,6 +39,10 @@ public class PilotComm extends Thread {
 	    		map.load(p.map);
 	    	}
 	    	
+	    	if (p.cmd == Type.DONE) {
+	    		robot.done();
+	    	}
+	    	
 	    	if (p.ambulance) {
 	    		robot.startAmbulance();
 	    		

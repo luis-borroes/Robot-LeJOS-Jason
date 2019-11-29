@@ -36,6 +36,10 @@ public class Coordinate implements Serializable {
 	}
 	
 	public double getCost() {
+		return cost;
+	}
+	
+	public double getCostPlusHeuristic() {
 		return costPlusHeuristic;
 	}
 	
@@ -53,6 +57,10 @@ public class Coordinate implements Serializable {
 	
 	public Coordinate getParent() {
 		return parent;
+	}
+	
+	public void setDirection(int dir) {
+		direction = dir;
 	}
 	
 	public int getDirection() {

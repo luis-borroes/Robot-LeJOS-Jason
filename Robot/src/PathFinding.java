@@ -1,13 +1,6 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PathFinding implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+public class PathFinding {
 
 	public static final int NORTH = 0;
 	public static final int EAST = 90;
@@ -88,7 +81,7 @@ public class PathFinding implements Serializable {
 		double cost = 0;
 		
 		for (int i = 0; i < agenda.size(); i++) {
-			cost = agenda.get(i).getCost();
+			cost = agenda.get(i).getCostPlusHeuristic();
 			
 			if (cost < minCost) {
 				minCost = cost;

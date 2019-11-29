@@ -143,7 +143,7 @@ plays(initiator,doctor).
 		move_towards_victim.
 
 		
-+at_hospital: .count(victimsaved(_)) > 1
++at_hospital(X): .count(victimsaved(_)) > 1
 	<-  .print("at hospital victimsaved > 2");
 	+done;
 		!donedance.
@@ -151,6 +151,7 @@ plays(initiator,doctor).
 		
 +at_hospital(X): .count(victim_found(_,_,_)) > 2
 	<-.abolish(at_hospital); 
+	+victimsaved(X)
 	pickupnoncritical.
 		
 	//<- pickUpNonCritical.

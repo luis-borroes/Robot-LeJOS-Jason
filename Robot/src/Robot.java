@@ -1,12 +1,3 @@
-// BumperCarSimple.java
-// 
-// A simple application that uses the Subsumption architecture to create a
-// bumper car, that drives forward, and changes direction given a collision.
-//
-// Terry Payne
-// 1st October 2018
-//
-
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
@@ -15,7 +6,6 @@ public class Robot {
 	public static void main(String[] args) {
 		Coordinate initialPos = new Coordinate(0, 0);
 		int heading = PilotRobot.NORTH;
-		//IP Address: 192.168.70.96
 		
 		MappingGateway map = new MappingGateway(initialPos);
 		PilotRobot me = new PilotRobot(map, heading);		

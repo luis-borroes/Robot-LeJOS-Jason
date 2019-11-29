@@ -162,8 +162,11 @@ public class MappingGateway {
 			return (getGridCell(coords).getStatus() == GridCellStatus.OCCUPIED);
 	}
 	
-	public ArrayList<Integer> getDirections(Coordinate coords) {
-		ArrayList<Coordinate> path = pathFinding.find(currentPosition, coords);
+	public ArrayList<Integer> getDirections(Coordinate coords, int direction) {
+		Coordinate start = new Coordinate(currentPosition);
+		start.setDirection(direction);
+		
+		ArrayList<Coordinate> path = pathFinding.find(start, coords);
 		ArrayList<Integer> directions = new ArrayList<Integer>();
 		
 		for (int i = 1; i < path.size(); i++) {

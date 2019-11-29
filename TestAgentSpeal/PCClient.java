@@ -92,6 +92,10 @@ public class PCClient extends Thread {
 		}
 	}
 	
+	public void done() {
+		sender.done();
+	}
+	
 	public RobotPacket getPacket() {
 		return packet;
 	}

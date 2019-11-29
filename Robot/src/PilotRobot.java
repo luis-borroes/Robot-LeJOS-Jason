@@ -92,7 +92,7 @@ public class PilotRobot {
 	    resetRobot(h);
 		
 		target = map.getCurrentPosition();
-		path = map.getDirections(target);
+		path = map.getDirections(target, heading);
 	    
 		// Reset the value of the gyroscope to zero
 		gSensor.reset();
@@ -239,6 +239,10 @@ public class PilotRobot {
 		pathCounter++;
 	}
 	
+	public void done() {
+		done = true;
+	}
+	
 	public boolean getDone() {
 		return done;
 	}
@@ -255,7 +259,7 @@ public class PilotRobot {
 		target = coords;
 		
 		if (coords.getHash() != map.getCurrentPosition().getHash()) {
-			path = map.getDirections(target);
+			path = map.getDirections(target, heading);
 			
 			if (path.size() == 0)
 				return false;
@@ -267,7 +271,7 @@ public class PilotRobot {
 	}
 	
 	public void rePath() {
-		path = map.getDirections(target);
+		path = map.getDirections(target, heading);
 		
 		//if (path.size() == 0)
 			//nextPath();
@@ -275,10 +279,10 @@ public class PilotRobot {
 	
 	public void setPathToUnvisited() {
 		target = map.getUnvisited();
-		path = map.getDirections(target);
+		path = map.getDirections(target, heading);
 		
 		if (path.size() == 0)
-			done = true;
+			done();;
 	}
 	
 	

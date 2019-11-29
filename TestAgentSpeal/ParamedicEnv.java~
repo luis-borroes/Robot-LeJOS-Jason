@@ -90,6 +90,7 @@ public class ParamedicEnv extends Environment {
 				pickupnoncritical();
 			} else if (action.getFunctor().equals("donedance")) {
 				System.out.println("woooo we done");
+				done();
             } else {
                 logger.info("executing: "+action+", but not implemented!");
                 return true;
@@ -126,6 +127,10 @@ public class ParamedicEnv extends Environment {
 		client.start();
 	}
 	
+	public void done() {
+		client.done();
+	}
+	
 	public void pickupnoncritical() {
 		client.go_to_noncriticals();
 	}
@@ -136,6 +141,12 @@ public class ParamedicEnv extends Environment {
 		System.out.println("at_hospital(" + counter + ")");
 		addPercept("paramedic",Literal.parseLiteral("at_hospital(" + counter + ")"));
 		counter++;
+	}
+	
+	public void at_non_critical(int xpos, int ypos) {
+		
+		addPercept("paramedic",Literal.parseLiteral("at_non_critical(" + xpos + "," + ypos +")"));
+
 	}
 	
 	public void connected() {

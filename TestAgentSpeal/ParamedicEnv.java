@@ -88,8 +88,9 @@ public class ParamedicEnv extends Environment {
 				
 			} else if (action.getFunctor().equals("pickupnoncritical")) {
 				pickupnoncritical();
-			} else if (action.getFunctor().equals("donedance")) {
+			} else if (action.getFunctor().equals("finish")) {
 				System.out.println("woooo we done");
+				done();
             } else {
                 logger.info("executing: "+action+", but not implemented!");
                 return true;
@@ -124,6 +125,10 @@ public class ParamedicEnv extends Environment {
 		mPack = map.save();
 		client = new PCClient(this, mPack);
 		client.start();
+	}
+	
+	public void done() {
+		client.done();
 	}
 	
 	public void pickupnoncritical() {

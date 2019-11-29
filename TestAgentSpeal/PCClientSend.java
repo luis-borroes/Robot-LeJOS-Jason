@@ -34,8 +34,14 @@ public class PCClientSend extends Thread {
 			System.out.println(x + " " + y);
     	}
     }
+	
+	public void done() {
+		packet.id++;
+		packet.cmd = Type.DONE;
+		packet.ambulance = false;
+	}
     
-    public void run(){
+    public void run() {
     	
 		try {
 			ObjectOutputStream oOut = new ObjectOutputStream(sock.getOutputStream());

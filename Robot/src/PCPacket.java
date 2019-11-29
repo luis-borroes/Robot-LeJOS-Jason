@@ -15,5 +15,5 @@ public class PCPacket implements Serializable {
 }
 
 enum Type {
-	NONE, MOVE, INIT
+	NONE, MOVE, INIT, DONE
 }

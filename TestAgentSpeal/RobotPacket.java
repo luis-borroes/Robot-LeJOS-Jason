@@ -17,3 +17,4 @@ public class RobotPacket implements Serializable {
 enum Status {
 	WAITING, MOVING, ODOMETRY
 }
+
