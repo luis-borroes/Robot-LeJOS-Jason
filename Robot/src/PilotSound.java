@@ -17,11 +17,14 @@ public class PilotSound extends Thread {
     	this.setDaemon(true);
     	robot = r;
     	
-    	Sound.setVolume(3);
+    	Sound.setVolume(2);
     }
+
+	public void ready() {
+		Sound.twoBeeps();
+	}
     
-    public void run(){
-    	
+    public void run() {
     	while (true) {
     		if (robot.getAmbulance()) {
     			Sound.playTone(220, 650);

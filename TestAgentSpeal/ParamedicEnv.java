@@ -16,6 +16,7 @@ public class ParamedicEnv extends Environment {
     public static final int HOSPITAL  = 8; // hospital code in grid model
     public static final int VICTIM  = 16; // victim code in grid model
 	public static final int NONCRITICAL = 32;
+	public int counter = 0;
     private Logger logger = Logger.getLogger("testing"+ParamedicEnv.class.getName());
     
     // Create objects for visualising the bay.  
@@ -81,11 +82,14 @@ public class ParamedicEnv extends Environment {
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
 				model.remove_non_critical(x, y);
 			}else if (action.getFunctor().equals("pickupnoncritical")) {
-				System.out.println("go to non criticals");
-				
+				pickupnoncritical();
 			}else if (action.getFunctor().equals("startserver")) {
 				start_server();
 				
+			} else if (action.getFunctor().equals("pickupnoncritical")) {
+				pickupnoncritical();
+			} else if (action.getFunctor().equals("donedance")) {
+				System.out.println("woooo we done");
             } else {
                 logger.info("executing: "+action+", but not implemented!");
                 return true;
@@ -122,9 +126,22 @@ public class ParamedicEnv extends Environment {
 		client.start();
 	}
 	
+	public void pickupnoncritical() {
+		client.go_to_noncriticals();
+	}
+	
 	
 	public void at_hospital() {
-		addPercept(Literal.parseLiteral("at_hospital"));
+		
+		System.out.println("at_hospital(" + counter + ")");
+		addPercept("paramedic",Literal.parseLiteral("at_hospital(" + counter + ")"));
+		counter++;
+	}
+	
+	public void at_non_critical(int xpos, int ypos) {
+		
+		addPercept("paramedic",Literal.parseLiteral("at_non_critical(" + xpos + "," + ypos +")"));
+
 	}
 	
 	public void connected() {
@@ -185,6 +202,7 @@ public class ParamedicEnv extends Environment {
 
 		
 		void addNonCritical(int x, int y) {
+			client.add_non_critical(x,y);
 			remove(VICTIM, x, invertY(y));
 			add(NONCRITICAL, x, invertY(y));
 			//ParamedicEnv.view.repaint();

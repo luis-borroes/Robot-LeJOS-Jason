@@ -116,7 +116,7 @@ public class PathFinding implements Serializable {
 			if (map.isWithinBounds(possible[i])) { // node within bounds
 				
 				if (!visited[possible[i].x][possible[i].y] && map.getGridCell(possible[i]).getStatus() != GridCellStatus.OCCUPIED) { // if not visited or occupied
-					possible[i].calculateCost(start, goal);
+					possible[i].calculateCost(goal);
 					agenda.add(possible[i]);
 					visited[possible[i].x][possible[i].y] = true;
 				}

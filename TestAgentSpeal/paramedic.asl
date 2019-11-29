@@ -131,9 +131,9 @@ plays(initiator,doctor).
 		.abolish(location(victim,X,Y));
 		go_to_hospital.
 
-+~critical(X,Y): .count(victim_found(_,_,_)) > 3
++~critical(X,Y): .count(victim_found(_,_,_)) > 2
     <- .print("The vic121212t ", X, ",", Y, " is not critical");
-		addNonCritical(X,Y);   // maybe we should be removing them from the map
+		//addNonCritical(X,Y);   // maybe we should be removing them from the map
 		go_to_hospital.
 
 
@@ -141,16 +141,27 @@ plays(initiator,doctor).
     <- .print("The victim at ", X, ",", Y, " is not critical");
 		addNonCritical(X,Y);
 		move_towards_victim.
+
+		
++at_hospital: .count(victimsaved(_)) > 1
+	<-  .print("at hospital victimsaved > 2");
+	+done;
+		!donedance.
 		
 		
-+at_hospital: startedWith(X) & .count(victim_found) >= X
-	<- pickUpNonCritical;
-		abolish(at_hospital).
++at_hospital(X): .count(victim_found(_,_,_)) > 2
+	<-.abolish(at_hospital); 
+	pickupnoncritical.
+		
 	//<- pickUpNonCritical.
 	
-+at_hospital 
-	<- !at;
-		abolish(at_hospital).
++at_hospital(X)
+	<-.print("at hospital");
+	//.abolish(at_hospital); 
+	//-at_hospital[source (percept)];
+		+victimsaved(X);
+		!at.
+		
 
 
 // ========================================================================
@@ -174,12 +185,13 @@ plays(initiator,doctor).
 	
 //+!at(Victim) : at(Victim).
 
-+!at: .count(victim_found(_,_,_)) > startedWith
++!at: .count(victim_found(_,_,_)) > 2
 	<- pickupnoncritical.
 
 +!at <- move_towards_victim.
 				//!at(Victim).
-
++!donedance <- finish.
+				
 +connected	
 	<-!at.
  			
@@ -197,6 +209,10 @@ plays(initiator,doctor).
 +victim_found(C,X,Y)
 	<- .print("didnt work"); 
 		!requestVictimStatus(doctor, X, Y, C).
+		
++at_non_critical(X,Y)
+	<- .print("at non crit"); 
+		go_to_hospital.
 	
 +test(C)
 	<- .send(D,tell,-location(victim,2,3));

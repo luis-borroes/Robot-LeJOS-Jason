@@ -12,8 +12,12 @@ public class PCClient extends Thread {
 	
 	private ArrayList<Coordinate> victims;
 	private int vCounter;
+	private int NCvcounter;
 	private Status oldState;
-	private boolean goingToHospital;
+	private GoingTo goal;
+
+	//ADDED THIS
+	private ArrayList<Coordinate> non_criticals = new ArrayList<Coordinate>();
 	
 	public PCClient(ParamedicEnv e, MapPacket m) {
 		map = m;
@@ -23,37 +27,68 @@ public class PCClient extends Thread {
 		
 		victims = map.victims;
 		vCounter = 0;
+		NCvcounter = 0;
 		oldState = packet.st;
 		
-		goingToHospital = false;
+		goal = GoingTo.NOWHERE;
 	}
+
+	
+	//THIS IS ALL CAMERONS CODE REMOVE THIS SHIT IF STUFF STARTS TO BREAK!!!!!
+	public void add_non_critical(int x, int y) {
+		Coordinate toadd = new Coordinate(x,y);
+		non_criticals.add(toadd);
+	}
+
+	public void go_to_noncriticals() {
+		Coordinate victim = non_criticals.get(NCvcounter);
+		NCvcounter++;
+		
+		goal = GoingTo.NON_CRITICAL;
+		
+		update(victim.x, victim.y);
+	}
+	//END OF MY ADDED CODE
 	
 	public void goToNextVictim() {
 		Coordinate victim = victims.get(vCounter);
 		vCounter++;
-		
-		goingToHospital = false;
-		update(victim.x, victim.y, goingToHospital);
+		System.out.println("going to victim java");
+
+		goal = GoingTo.VICTIM;
+
+		update(victim.x, victim.y);
 	}
 	
 	public void goToHospital() {
 		System.out.println("Hello");
-		goingToHospital = true;
-		update(map.hospital.x, map.hospital.y, goingToHospital);
+
+		goal = GoingTo.HOSPITAL;
+
+		update(map.hospital.x, map.hospital.y);
 	}
 	
 	public void reached() {
-		if (goingToHospital) {
+		if (toHospital()) {
 			env.at_hospital();
+
+		} else if (goal == GoingTo.NON_CRITICAL) {
+			env.at_non_critical(packet.pos.x, packet.pos.y);
 		
 		} else {
 			env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);
 		}
+
+		goal = GoingTo.NOWHERE;
+	}
+
+	public boolean toHospital() {
+		return (goal == GoingTo.HOSPITAL);
 	}
 	
-	public void update(int x, int y, boolean goingToHospital) {
+	public void update(int x, int y) {
 		if (sender != null) {
-			sender.update(x, y, goingToHospital);
+			sender.update(x, y, toHospital());
 		}
 	}
 	
@@ -114,4 +149,8 @@ public class PCClient extends Thread {
 			} catch (InterruptedException e) {}
 		}
 	}
+}
+
+enum GoingTo {
+	NOWHERE, VICTIM, HOSPITAL, NON_CRITICAL
 }

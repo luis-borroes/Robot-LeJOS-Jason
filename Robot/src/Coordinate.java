@@ -6,7 +6,10 @@ public class Coordinate implements Serializable {
 	
 	int x;
 	int y;
+
 	private double cost;
+	private double costPlusHeuristic;
+
 	private Coordinate parent;
 	private int direction;
 	
@@ -20,6 +23,7 @@ public class Coordinate implements Serializable {
 		this.x = x;
 		this.y = y;
 		cost = 0;
+		costPlusHeuristic = 0;
 		parent = p;
 		direction = d;
 	}
@@ -28,23 +32,23 @@ public class Coordinate implements Serializable {
 		this.x = coord.x;
 		this.y = coord.y;
 		cost = 0;
+		costPlusHeuristic = 0;
 	}
 	
 	public double getCost() {
-		return cost;
+		return costPlusHeuristic;
 	}
 	
-	public void calculateCost(Coordinate start, Coordinate goal) {
+	public void calculateCost(Coordinate goal) {
 		double turnCost = 0;
 		
 		if (parent.getDirection() != direction)
-			turnCost = 2;
+			turnCost = 1;
 		
-		double gn = Math.abs(x - start.x) + Math.abs(y - start.y) + turnCost; //manhattan distance for cost to node + cost for turns
-		//double hn = Math.sqrt(Math.pow(goal.x - x, 2) + Math.pow(goal.y - y, 2)); //euclidian distance for heuristic from node to goal
+		cost = parent.getCost() + 1 + turnCost; //cumulative cost + cost of turns
 		double hn = Math.abs(x - goal.x) + Math.abs(y - goal.y);
 		
-		cost = gn + hn;
+		costPlusHeuristic = cost + hn;
 	}
 	
 	public Coordinate getParent() {
