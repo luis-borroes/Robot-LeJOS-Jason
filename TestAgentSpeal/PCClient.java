@@ -26,7 +26,6 @@ public class PCClient extends Thread {
 		env = e;
 		optRoute = new OptRoute(map);
 		
-		System.out.println(map.getVictims());
 		route = optRoute.optimumRoute(map.getCurrentPosition(), mPack.hospital, map.getVictims());
 		rCounter = 0;
 
@@ -55,8 +54,6 @@ public class PCClient extends Thread {
 	public void goToNextVictim() {
 		Coordinate victim = route.get(rCounter);
 		rCounter++;
-		
-		System.out.println(map.getVictims());
 
 		System.out.println("going to victim java");
 
@@ -86,9 +83,7 @@ public class PCClient extends Thread {
 		
 		} else {
 			env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);
-			System.out.println(map.getVictims());
 			map.removeVictim(packet.pos);
-			System.out.println(map.getVictims());
 		}
 
 		goal = GoingTo.NOWHERE;
@@ -142,8 +137,6 @@ public class PCClient extends Thread {
 						
 						if (oldState != packet.st && packet.st == Status.WAITING)
 							reached();
-
-						System.out.println(map.getVictims());
 						
 						oldState = packet.st;
 					}
