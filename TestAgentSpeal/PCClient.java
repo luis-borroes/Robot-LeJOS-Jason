@@ -4,30 +4,32 @@ import java.util.ArrayList;
  
 public class PCClient extends Thread {
 	
-	private MapPacket map;
+	private MappingGateway map;
+	private MapPacket mPack;
 	private RobotPacket packet;
 	private PCClientSend sender;
+	private OptRoute optRoute;
 	
 	private ParamedicEnv env;
 	
-	private ArrayList<Coordinate> victims;
-	private int vCounter;
-	private int NCvcounter;
+	private ArrayList<Coordinate> route;
+	private int rCounter;
 	private Status oldState;
 	private GoingTo goal;
-
-	//ADDED THIS
-	private ArrayList<Coordinate> non_criticals = new ArrayList<Coordinate>();
 	
-	public PCClient(ParamedicEnv e, MapPacket m) {
+	public PCClient(ParamedicEnv e, MappingGateway m) {
 		map = m;
+		mPack = m.save();
+
 		sender = null;
 		packet = new RobotPacket();
 		env = e;
+		optRoute = new OptRoute(map);
 		
-		victims = map.victims;
-		vCounter = 0;
-		NCvcounter = 0;
+		System.out.println(map.getVictims());
+		route = optRoute.optimumRoute(map.getCurrentPosition(), mPack.hospital, map.getVictims());
+		rCounter = 0;
+
 		oldState = packet.st;
 		
 		goal = GoingTo.NOWHERE;
@@ -37,12 +39,12 @@ public class PCClient extends Thread {
 	//THIS IS ALL CAMERONS CODE REMOVE THIS SHIT IF STUFF STARTS TO BREAK!!!!!
 	public void add_non_critical(int x, int y) {
 		Coordinate toadd = new Coordinate(x,y);
-		non_criticals.add(toadd);
+		map.addNonCritical(toadd);
 	}
 
 	public void go_to_noncriticals() {
-		Coordinate victim = non_criticals.get(NCvcounter);
-		NCvcounter++;
+		Coordinate victim = map.getNonCriticals().get(rCounter);
+		rCounter++;
 		
 		goal = GoingTo.NON_CRITICAL;
 		
@@ -51,8 +53,11 @@ public class PCClient extends Thread {
 	//END OF MY ADDED CODE
 	
 	public void goToNextVictim() {
-		Coordinate victim = victims.get(vCounter);
-		vCounter++;
+		Coordinate victim = route.get(rCounter);
+		rCounter++;
+		
+		System.out.println(map.getVictims());
+
 		System.out.println("going to victim java");
 
 		goal = GoingTo.VICTIM;
@@ -65,18 +70,25 @@ public class PCClient extends Thread {
 
 		goal = GoingTo.HOSPITAL;
 
-		update(map.hospital.x, map.hospital.y);
+		update(mPack.hospital.x, mPack.hospital.y);
 	}
 	
 	public void reached() {
 		if (toHospital()) {
 			env.at_hospital();
+			System.out.println(map.getVictims());
+			route = optRoute.optimumRoute(packet.pos, mPack.hospital, map.getVictims());
+			rCounter = 0;
 
 		} else if (goal == GoingTo.NON_CRITICAL) {
 			env.at_non_critical(packet.pos.x, packet.pos.y);
+			map.removeNonCritical(packet.pos);
 		
 		} else {
 			env.seenVictim(packet.left.name().toLowerCase(), packet.pos.x, packet.pos.y);
+			System.out.println(map.getVictims());
+			map.removeVictim(packet.pos);
+			System.out.println(map.getVictims());
 		}
 
 		goal = GoingTo.NOWHERE;
@@ -116,7 +128,7 @@ public class PCClient extends Thread {
 				
 				System.out.println("Connected");
 
-				sender = new PCClientSend(sock, map);
+				sender = new PCClientSend(sock, mPack);
 				sender.start();
 				
 				ObjectInputStream oIn = new ObjectInputStream(sock.getInputStream());
@@ -130,6 +142,8 @@ public class PCClient extends Thread {
 						
 						if (oldState != packet.st && packet.st == Status.WAITING)
 							reached();
+
+						System.out.println(map.getVictims());
 						
 						oldState = packet.st;
 					}

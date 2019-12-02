@@ -25,7 +25,6 @@ public class ParamedicEnv extends Environment {
     private RobotBayView view;
 	
 	private MappingGateway map;
-	private MapPacket mPack;
 	private PCClient client;
 
     /** Called before the MAS execution with the args informed in .mas2j */
@@ -39,7 +38,6 @@ public class ParamedicEnv extends Environment {
 		
 		map = new MappingGateway(new Coordinate(0, 0));
 		map.setSize(new Coordinate(6, 6));
-		mPack = map.save();
 		
     }
 
@@ -122,8 +120,7 @@ public class ParamedicEnv extends Environment {
 	}
 	
 	public void start_server() {
-		mPack = map.save();
-		client = new PCClient(this, mPack);
+		client = new PCClient(this, map);
 		client.start();
 	}
 	
@@ -235,7 +232,7 @@ public class ParamedicEnv extends Environment {
 		
         void addVictim(int x, int y) {
             add(VICTIM, x, invertY(y));
-			map.getGridCell(x, y).setStatus(GridCellStatus.VICTIM);
+			map.addVictim(new Coordinate(x, y));
         }
         void addHospital(int x, int y) {
             add(HOSPITAL, x, invertY(y));
