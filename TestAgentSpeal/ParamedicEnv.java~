@@ -88,7 +88,7 @@ public class ParamedicEnv extends Environment {
 				
 			} else if (action.getFunctor().equals("pickupnoncritical")) {
 				pickupnoncritical();
-			} else if (action.getFunctor().equals("donedance")) {
+			} else if (action.getFunctor().equals("finish")) {
 				System.out.println("woooo we done");
 				done();
             } else {

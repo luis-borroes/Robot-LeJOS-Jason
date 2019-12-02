@@ -1,13 +1,6 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PathFinding implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+public class PathFinding {
 
 	public static final int NORTH = 0;
 	public static final int EAST = 90;
@@ -88,7 +81,7 @@ public class PathFinding implements Serializable {
 		double cost = 0;
 		
 		for (int i = 0; i < agenda.size(); i++) {
-			cost = agenda.get(i).getCost();
+			cost = agenda.get(i).getCostPlusHeuristic();
 			
 			if (cost < minCost) {
 				minCost = cost;
@@ -116,7 +109,7 @@ public class PathFinding implements Serializable {
 			if (map.isWithinBounds(possible[i])) { // node within bounds
 				
 				if (!visited[possible[i].x][possible[i].y] && map.getGridCell(possible[i]).getStatus() != GridCellStatus.OCCUPIED) { // if not visited or occupied
-					possible[i].calculateCost(start, goal);
+					possible[i].calculateCost(goal);
 					agenda.add(possible[i]);
 					visited[possible[i].x][possible[i].y] = true;
 				}

@@ -8,6 +8,8 @@ public class MappingGateway {
 	private PathFinding pathFinding;
 	
 	private Coordinate[] corners;
+	private ArrayList<Coordinate> victims;
+	private ArrayList<Coordinate> nonCriticals;
 	
 	public MappingGateway(Coordinate initialPos) {
 		this.setPosition(initialPos);
@@ -16,6 +18,9 @@ public class MappingGateway {
 
 		setHospital(0, 0);
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);
+
+		victims = new ArrayList<Coordinate>();
+		nonCriticals = new ArrayList<Coordinate>();
 		
 		pathFinding = new PathFinding(this);
 	}
@@ -47,6 +52,34 @@ public class MappingGateway {
 	public Coordinate[] getCorners() {
 		return corners;
 	}
+
+	public ArrayList<Coordinate> getVictims() {
+		return victims;
+	}
+
+	public void addVictim(Coordinate v) {
+		getGridCell(v).setStatus(GridCellStatus.VICTIM);
+		victims.add(v);
+	}
+
+	public void removeVictim(Coordinate v) {
+		getGridCell(v).setStatus(GridCellStatus.UNOCCUPIED);
+		victims.remove(v);
+	}
+
+	public ArrayList<Coordinate> getNonCriticals() {
+		return nonCriticals;
+	}
+
+	public void addNonCritical(Coordinate v) {
+		getGridCell(v).setStatus(GridCellStatus.NONCRITICAL);
+		nonCriticals.add(v);
+	}
+
+	public void removeNonCritical(Coordinate v) {
+		getGridCell(v).setStatus(GridCellStatus.UNOCCUPIED);
+		nonCriticals.remove(v);
+	}
 	
 	public MapPacket save() {
 		MapPacket m = new MapPacket();
@@ -76,7 +109,7 @@ public class MappingGateway {
 		}
 		
 		for (int i = 0; i < m.victims.size(); i++) {
-			getGridCell(m.victims.get(i)).setStatus(GridCellStatus.VICTIM);
+			addVictim(m.victims.get(i));
 		}
 		
 		hospital = m.hospital;
@@ -98,7 +131,7 @@ public class MappingGateway {
 		currentPosition = pos;
 	}
 	
-	public Coordinate getHospital(Coordinate pos) {
+	public Coordinate getHospital() {
 		return hospital;
 	}
 	
@@ -194,5 +227,12 @@ public class MappingGateway {
 		if (isWithinBounds(coords)) {
 			getGridCell(coords).seen(occupied);
 		}
+	}
+	
+	public Coordinate getPathInfoNode(Coordinate start, Coordinate end) {
+		ArrayList<Coordinate> path = pathFinding.find(start, end);
+		Coordinate finalNode = path.get(path.size() - 1);
+		
+		return finalNode;
 	}
 }

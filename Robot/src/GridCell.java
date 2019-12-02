@@ -62,5 +62,5 @@ public class GridCell implements Serializable {
 }
 
 enum GridCellStatus {
-	OCCUPIED, UNOCCUPIED, UNKNOWN, UNCERTAIN, VICTIM
+	OCCUPIED, UNOCCUPIED, UNKNOWN, UNCERTAIN, VICTIM, NONCRITICAL
 }
