@@ -244,7 +244,7 @@ public class PilotMonitor extends Thread {
 		lcd.drawString("r col: " + robot.getRColID().name(), INFO_X, 60, 0);
 		lcd.drawString("line: " + robot.getOverLine(), INFO_X, 70, 0);
 		lcd.drawString("c count: " + robot.getCellCounter(), INFO_X, 80, 0);
-		lcd.drawString("p index: " + robot.getPathCounter(), INFO_X, 90, 0);
+		lcd.drawString("packet: " + robot.getPacketCounter(), INFO_X, 90, 0);
 		lcd.drawString("p size: " + robot.getPath().size(), INFO_X, 100, 0);
 		lcd.drawString("target: (" + robot.getTarget().x + ", " + robot.getTarget().y + ")", INFO_X, 110, 0);
 		lcd.drawString("done: " + robot.getDone(), INFO_X, 120, 0);

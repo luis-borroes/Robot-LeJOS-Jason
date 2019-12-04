@@ -45,6 +45,7 @@ public class PilotRobot {
 	private boolean isAmbulance;
 	private int cellCounter;
 	private int pathCounter;
+	private int packetCounter;
 	private Coordinate target;
 	private ArrayList<Integer> path;
 	
@@ -108,6 +109,7 @@ public class PilotRobot {
 		isAmbulance = false;
 		cellCounter = 0;
 		pathCounter = 0;
+		packetCounter = 0;
 		done = false;
 	}
 	
@@ -237,6 +239,14 @@ public class PilotRobot {
 	
 	public void nextPath() {
 		pathCounter++;
+	}
+	
+	public void setPacketCounter(int pid) {
+		packetCounter = pid;
+	}
+	
+	public int getPacketCounter() {
+		return packetCounter;
 	}
 	
 	public void done() {

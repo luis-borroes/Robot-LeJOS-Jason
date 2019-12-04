@@ -51,6 +51,7 @@ public class PilotComm extends Thread {
 	    	}
 	    	
 	    	packetID = p.id;
+	    	robot.setPacketCounter(p.id);
     	}
     }
     
