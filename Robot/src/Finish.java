@@ -21,7 +21,7 @@ public class Finish implements Behavior {
 	
 	//check if the map is finished
 	public boolean takeControl() {
-		return (me.getDone());
+		return (me.getDone() && !me.getLoc());
 	}
 	
 	public void rotate() {

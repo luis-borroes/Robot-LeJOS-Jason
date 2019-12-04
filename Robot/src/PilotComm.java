@@ -16,27 +16,30 @@ public class PilotComm extends Thread {
 	public static final int port = 1234;
 	
 	public PilotRobot robot;
+	public PilotInterface meInt;
 	private MappingGateway map;
 	private ServerSocket server;
 	private PilotCommSend sender;
 	
 	private int packetID;
 	
-    public PilotComm(PilotRobot r, MappingGateway m){
+    public PilotComm(PilotRobot r, PilotInterface i, MappingGateway m){
     	this.setDaemon(true);
     	robot = r;
+    	meInt = i;
     	map = m;
     	packetID = -1;
     }
 
     public void handle(PCPacket p) {
     	if (p.id > packetID) {
-	    	if (p.cmd == Type.MOVE) {
+	    	if (p.cmd == Type.MOVE && !robot.getLoc()) {
 	    		robot.setPath(p.target);
 	    	}
 	    	
 	    	if (p.cmd == Type.INIT) {
 	    		map.load(p.map);
+	    		robot.setLoc(p.localise);
 	    	}
 	    	
 	    	if (p.cmd == Type.DONE) {
@@ -62,7 +65,7 @@ public class PilotComm extends Thread {
 				server = new ServerSocket(port);
 				Socket client = server.accept();
 				
-				sender = new PilotCommSend(robot, client);
+				sender = new PilotCommSend(robot, meInt, client);
 				sender.start();
 				
 				ObjectInputStream oIn = new ObjectInputStream(client.getInputStream());

@@ -72,7 +72,7 @@ public class Coordinate implements Serializable {
 	}
 
     @Override
-    public boolean equals(Object o) { 
+    public boolean equals(Object o) {
   
         // If the object is compared with itself then return true   
         if (o == this) { 

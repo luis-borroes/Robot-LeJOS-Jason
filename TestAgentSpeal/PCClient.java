@@ -17,6 +17,23 @@ public class PCClient extends Thread {
 	private Status oldState;
 	private GoingTo goal;
 	
+	public static int[][] mapp = {
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0}};
+			
+	public static GUI gui;
+	String smap = "";
+	
 	public PCClient(ParamedicEnv e, MappingGateway m) {
 		map = m;
 		mPack = m.save();
@@ -130,15 +147,39 @@ public class PCClient extends Thread {
 				
 				env.connected();
 				
+				GUI.buildgui();
+				
 				try {
 					while (true) {
 						packet = (RobotPacket) oIn.readObject();
 						System.out.println(packet.st + " " + packet.left + " " + packet.right + " " + packet.pos.x + " " + packet.pos.y);
 						
-						if (oldState != packet.st && packet.st == Status.WAITING)
+						if (oldState != packet.st && packet.st == Status.WAITING) {
 							reached();
 						
+							if (oldState == Status.LOCALISING) {
+								route = optRoute.optimumRoute(packet.pos, mPack.hospital, map.getVictims());
+							}
+						}
+						
 						oldState = packet.st;
+						
+						int c =1;
+						String str = packet.emap;
+						
+						smap = str;
+						String[] smapp = smap.split("a");
+						for (int a = 0; a < mapp.length-1 ; a++) {
+							for (int b=0; b <mapp.length ; b++) {
+							
+								mapp[a][b] = Integer.parseInt(smapp[c]);
+								c++;
+							}
+						}
+						mapp[Integer.parseInt(""+smapp[0].charAt(0))][Integer.parseInt(""+smapp[0].charAt(1))] = Integer.parseInt(""+smapp[0].charAt(2)+smapp[0].charAt(3));
+						
+						
+						GUI.updateMap();
 					}
 					
 				} catch (Exception e) {

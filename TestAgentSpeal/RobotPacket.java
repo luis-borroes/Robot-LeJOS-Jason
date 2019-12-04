@@ -8,6 +8,8 @@ public class RobotPacket implements Serializable {
 	Color right = Color.WHITE;
 	
 	Coordinate pos = new Coordinate(0, 0);
+	
+	String emap = "";
 
 	public RobotPacket() {
 		
@@ -15,6 +17,5 @@ public class RobotPacket implements Serializable {
 }
 
 enum Status {
-	WAITING, MOVING, ODOMETRY
+	WAITING, MOVING, ODOMETRY, LOCALISING
 }
-

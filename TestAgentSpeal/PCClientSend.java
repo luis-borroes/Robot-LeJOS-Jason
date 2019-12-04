@@ -15,6 +15,7 @@ public class PCClientSend extends Thread {
     	packet = new PCPacket();
     	packet.cmd = Type.INIT;
     	packet.map = map;
+		packet.localise = true;
     }
 
     public void update(int x, int y, boolean goingToHospital) {

@@ -8,20 +8,25 @@ public class Robot {
 		int heading = PilotRobot.NORTH;
 		
 		MappingGateway map = new MappingGateway(initialPos);
-		PilotRobot me = new PilotRobot(map, heading);		
+		PilotRobot me = new PilotRobot(map, heading);
+		PilotInterface meInt = new PilotInterface(me);
 		PilotMonitor myMonitor = new PilotMonitor(me, map, 400);	
-		PilotComm comm = new PilotComm(me, map);
+		PilotComm comm = new PilotComm(me, meInt, map);
 		PilotSound sound = new PilotSound(me);
 
 		// Set up the behaviours for the Arbitrator and construct it.
 		//Behavior avoid = new Avoid(me);
 		//Behavior plan = new Plan(me);
+		Behavior moveLocate = new MoveLocate(meInt);
+		Behavior senseEnv = new SenseEnv(meInt);
+		Behavior pathGenLocal = new PathGenLocal(meInt);
 		Behavior moveTowards = new MoveTowards(me);
 		Behavior correctOdometry = new CorrectOdometry(me);
 		Behavior finish = new Finish(me);
 		//Behavior calibrate = new Calibrate(me);
 
-		Behavior [] bArray = {moveTowards, correctOdometry, finish};
+		Behavior [] bArray = {moveLocate, pathGenLocal, senseEnv, moveTowards, correctOdometry, finish};
+		//Behavior [] bArray = {moveTowards, correctOdometry, finish};
 		//Behavior [] bArray = {plan, moveTowards, correctOdometry, avoid, finish};
 		//Behavior [] bArray = {calibrate};
 		

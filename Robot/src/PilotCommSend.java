@@ -5,12 +5,14 @@ public class PilotCommSend extends Thread {
 	public static final int port = 1234;
 
 	public PilotRobot robot;
+	public PilotInterface meInt;
 	private Socket client;
 	boolean running;
 	
-    public PilotCommSend(PilotRobot r, Socket c){
+    public PilotCommSend(PilotRobot r, PilotInterface i, Socket c){
     	this.setDaemon(true);
     	robot = r;
+    	meInt = i;
     	client = c;
     	running = true;
     }
@@ -24,11 +26,17 @@ public class PilotCommSend extends Thread {
     	if (robot.getOdometry())
     		p.st = Status.ODOMETRY;
     	
+    	if (robot.getLoc()) {
+    		p.st = Status.LOCALISING;
+    	}
+    	
     	
 		p.left = robot.getLColID();
 		p.right = robot.getRColID();
 		
 		p.pos = robot.getMap().getCurrentPosition();
+		
+		p.emap = meInt.sendMap();
 		
 		return p;
     }

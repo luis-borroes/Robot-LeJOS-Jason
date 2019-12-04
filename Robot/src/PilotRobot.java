@@ -49,6 +49,8 @@ public class PilotRobot {
 	private Coordinate target;
 	private ArrayList<Integer> path;
 	
+	private boolean doingLoc;
+	
 	private boolean done;
 
 	public PilotRobot(MappingGateway m, int h) {
@@ -64,11 +66,11 @@ public class PilotRobot {
 		distSP = usSensor.getDistanceMode();
 		gyroSP = gSensor.getAngleMode();
 		
-		filterSP = new MedianFilter(distSP, 5);
+		//filterSP = new MedianFilter(distSP, 5);
 		
 		leftSample = new float[leftSP.sampleSize()];
 		rightSample = new float[rightSP.sampleSize()];
-		distSample = new float[filterSP.sampleSize()];		// Size is 1
+		distSample = new float[distSP.sampleSize()];		// Size is 1
 		angleSample = new float[gyroSP.sampleSize()];	// Size is 1
 
 		// Set up the wheels by specifying the diameter of the
@@ -147,7 +149,7 @@ public class PilotRobot {
 	}
 	
 	public float getDistance() {
-    	filterSP.fetchSample(distSample, 0);
+    	distSP.fetchSample(distSample, 0);
     	return distSample[0];
 	}
 
@@ -158,6 +160,10 @@ public class PilotRobot {
 	
 	public void resetGyro() {
 		gSensor.reset();
+	}
+	
+	public void setHeading(int h) {
+		heading = h;
 	}
 	
 	public int getHeading() {
@@ -182,6 +188,10 @@ public class PilotRobot {
 	
 	public boolean getMoving() {
 		return moving;
+	}
+	
+	public void startMoving() {
+		moving = true;
 	}
 	
 	public void stopMoving() {
@@ -247,6 +257,14 @@ public class PilotRobot {
 	
 	public int getPacketCounter() {
 		return packetCounter;
+	}
+	
+	public void setLoc(boolean loc) {
+		doingLoc = loc;
+	}
+	
+	public boolean getLoc() {
+		return doingLoc;
 	}
 	
 	public void done() {

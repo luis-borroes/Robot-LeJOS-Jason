@@ -14,99 +14,111 @@ public class test {
 		
 		m.setSize(new Coordinate(6, 6));
 
-		m.addVictim(new Coordinate(2, 3));
-		m.addVictim(new Coordinate(3, 1));
-		m.addVictim(new Coordinate(5, 5));
+		m.setHospital(new Coordinate(0, 0));
+		m.addVictim(new Coordinate(2, 0));
+		m.addVictim(new Coordinate(2, 2));
+		m.addVictim(new Coordinate(2, 4));
 		m.addVictim(new Coordinate(0, 5));
-		m.addVictim(new Coordinate(2, 5));
-		m.getGridCell(1, 3).setStatus(GridCellStatus.OCCUPIED);
-		m.getGridCell(1, 5).setStatus(GridCellStatus.OCCUPIED);
-		m.getGridCell(2, 4).setStatus(GridCellStatus.OCCUPIED);
-		m.getGridCell(3, 3).setStatus(GridCellStatus.OCCUPIED);
+		m.addVictim(new Coordinate(5, 4));
+		m.getGridCell(1, 1).setStatus(GridCellStatus.OCCUPIED);
+		m.getGridCell(1, 4).setStatus(GridCellStatus.OCCUPIED);
+		m.getGridCell(4, 1).setStatus(GridCellStatus.OCCUPIED);
+		m.getGridCell(4, 4).setStatus(GridCellStatus.OCCUPIED);
 		
 		test o = new test(m);
 		
-		ArrayList<Coordinate> perms = o.optimumRoute(m.getCurrentPosition(), m.getHospital(), m.getVictims());
+		int[][] realmap = o.genRealMap();
 		
-		for (int i =0; i < perms.size() ; i++){
-			Coordinate temp = perms.get(i);
-			System.out.print(temp.x + "-" +temp.y+ "   " );	
+		for (int i = 0; i < realmap.length; i++) {
+			for (int j = 0; j < realmap[i].length; j++) {
+				System.out.print(realmap[i][j] + ",");
+			}
 			
-			System.out.println("hey babycakes" + i);
+			System.out.println();
 		}
 		
 	}
 	
-	//Calculate the optimum route
-	public ArrayList<Coordinate> optimumRoute(Coordinate start, Coordinate hospital, ArrayList<Coordinate> victims){
-		ArrayList<ArrayList<Coordinate>> perms = generateAllPerms(start, hospital, victims);
+	public int[][] genMap() {
+		Coordinate size = map.getSize();
+		int[][] m = new int[(size.y * 2) + 2][(size.x * 2) + 2];
 		
-		double lowestCost = 100000.0;
-		ArrayList<Coordinate> bestPerm = new ArrayList<Coordinate>();
-
-		for (int i = 0; i < perms.size(); i++) {
-
-			double cost = 0;
-			ArrayList<Coordinate> perm = perms.get(i);
+		for (int y = 0; y < (size.y * 2) + 2; y++) {
 			
-			int direction = start.getDirection();
+			for (int x = 0; x < (size.x * 2) + 2; x++) {
+				m[y][x] = 0;
+			}
+		}
+		
+		return m;
+	}
+	
+	public int[][] genRealMap() {
+		Coordinate size = map.getSize();
+		
+		int[][] rmap = new int[size.y + 2][size.x + 2];
+		int value = -1;
+		
 
+		for (int y = 0; y < (size.y + 2); y++) {
 			
-			for (int a = 0; a < perm.size() - 1; a++) {
-				Coordinate s = perm.get(a);
-				s.setDirection(direction);
+			for (int x = 0; x < (size.x + 2); x++) {
 				
-				Coordinate goal = map.getPathInfoNode(s, perm.get(a + 1));
-
-				cost += goal.getCost();
-				direction = goal.getDirection();
-			}
-			
-			if (cost < lowestCost){
-				lowestCost = cost;
-				bestPerm = perm;
-			}
-		}
-		
-		bestPerm.remove(0);
-		bestPerm.remove(bestPerm.size() - 1);
-
-		return bestPerm;
-	}
+				//if surrounding coordinates
+				if (x == 0 || y == 0 || x == (size.x + 1) || y == (size.y + 1)) {
+					value = -1;
 					
-	
-	//every order
-	public ArrayList<ArrayList<Coordinate>> generateAllPerms(Coordinate start, Coordinate hospital, ArrayList<Coordinate> victims) {
-		ArrayList<ArrayList<Coordinate>> perms = generatePerm(victims);
-		
-		for (int i = 0; i < perms.size(); i++) {
-			perms.get(i).add(hospital);
-			perms.get(i).add(0, start);
-		}
-		
-		return perms;
-	}
-	
-	
-	public ArrayList<ArrayList<Coordinate>> generatePerm(ArrayList<Coordinate> original) {
-		if (original.size() == 0) {
-			ArrayList<ArrayList<Coordinate>> result = new ArrayList<ArrayList<Coordinate>>(); 
-			result.add(new ArrayList<Coordinate>()); 
-			return result; 
-		}
-		
-		Coordinate firstElement = original.remove(0);
-		ArrayList<ArrayList<Coordinate>> returnValue = new ArrayList<ArrayList<Coordinate>>();
-		ArrayList<ArrayList<Coordinate>> permutations = generatePerm(original);
-		
-		for (ArrayList<Coordinate> smallerPermutated : permutations) {
-			for (int index=0; index <= smallerPermutated.size(); index++) {
-				ArrayList<Coordinate> temp = new ArrayList<Coordinate>(smallerPermutated);
-				temp.add(index, firstElement);
-				returnValue.add(temp);
+				} else {
+
+					int realX = x - 1;
+					int realY = y - 1;
+					Coordinate current = new Coordinate(realX, realY);
+
+					
+					if (map.getHospital().equals(current)) {
+						value = 8;
+
+					} else {
+						GridCell cell = map.getGridCell(current);
+						
+						switch (cell.getStatus()) {
+							case OCCUPIED:
+								value = -1;
+								break;
+								
+							case UNOCCUPIED:
+								value = 2;
+								break;
+								
+							case UNKNOWN:
+								value = 2;
+								break;
+								
+							case UNCERTAIN:
+								value = -1;
+								break;
+								
+							case VICTIM:
+								value = 3;
+								break;
+								
+							case NONCRITICAL:
+								value = 3;
+								break;
+								
+							default:
+								value = 1;
+								break;
+						}
+					}
+				}
+				
+				rmap[y][(size.x + 1) - x] = value;
+				
 			}
 		}
 		
-		return returnValue;
+		return rmap;
+		
 	}
 }
