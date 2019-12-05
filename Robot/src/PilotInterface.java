@@ -11,18 +11,28 @@ public class PilotInterface {
 	
 	public Localisation loc;
 	
-	public int[][] realmapy;
+	public int[][] realmap;
 	public int[][] map;
 	
-	public int[][] realmap ={
-	        {-1,-1,-1,-1,-1,-1,-1,-1},
-			{-1,2,2,2,2,2,8,-1},
-			{-1,2,2,2,2,2,2,-1},
-			{-1,2,2,2,2,-1,3,-1},
-			{-1,2,3,-1,2,3,-1,-1},
-			{-1,2,2,2,2,-1,3,-1},
-			{-1,3,2,2,2,2,2,-1},
-			{-1,-1,-1,-1,-1,-1,-1,-1}}; 
+//	public int[][] realmap ={
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//			{-1,2,3,2,2,3,2,-1},
+//			{-1,2,2,2,2,2,2,-1},
+//			{-1,2,2,3,2,-1,2,-1},
+//			{-1,3,2,-1,-1,2,2,-1},
+//			{-1,2,2,2,2,2,3,-1},
+//			{-1,8,2,2,2,2,-1,-1},
+//			{-1,-1,-1,-1,-1,-1,-1,-1}}; 
+	
+//	public int[][] realmap ={
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1},
+//	        {-1,-1,-1,-1,-1,-1,-1,-1}}; 
 
 	public int probx;
 	public int proby;
@@ -40,8 +50,8 @@ public class PilotInterface {
 		me = robot;
 		mapping = me.getMap();
 		
-		realmapy = genRealMap();
-		map = genMap();
+		genRealMap();
+		genMap();
 
 		probx = 0;
 		proby = 0;
@@ -94,51 +104,6 @@ public class PilotInterface {
 				return '?';
 	    }
 	}
-	
-	
-//	public float North() {
-//		int rotAngle = PilotRobot.NORTH - me.getHeading();
-//		
-//		if (rotAngle > 360)
-//			rotAngle -= 360;
-//		else if (rotAngle < 0)
-//			rotAngle += 360;
-//		
-//		return (float) rotAngle;
-//	}
-//	
-//	public float East() {
-//		int rotAngle = PilotRobot.EAST - me.getHeading();
-//		
-//		if (rotAngle > 360)
-//			rotAngle -= 360;
-//		else if (rotAngle < 0)
-//			rotAngle += 360;
-//		
-//		return (float) rotAngle;
-//	}
-//	
-//	public float South() {
-//		int rotAngle = PilotRobot.SOUTH - me.getHeading();
-//		
-//		if (rotAngle > 360)
-//			rotAngle -= 360;
-//		else if (rotAngle < 0)
-//			rotAngle += 360;
-//		
-//		return (float) rotAngle;
-//	}
-//	
-//	public float West() {
-//		int rotAngle = PilotRobot.WEST - me.getHeading();
-//		
-//		if (rotAngle > 360)
-//			rotAngle -= 360;
-//		else if (rotAngle < 0)
-//			rotAngle += 360;
-//		
-//		return (float) rotAngle;
-//	}
 	
 	
 	public void rotateUntil( char direction ) {
@@ -277,26 +242,23 @@ public class PilotInterface {
 	}
 	
 	
-	public int[][] genMap() {
+	public void genMap() {
 		Coordinate size = mapping.getSize();
-		int[][] m = new int[(size.y * 2)][(size.x * 2)];
+		map = new int[(size.y * 2)][(size.x * 2)];
 		
 		for (int y = 0; y < (size.y * 2); y++) {
 			
 			for (int x = 0; x < (size.x * 2); x++) {
-				m[y][x] = 0;
+				map[y][x] = 0;
 			}
 		}
-		
-		return m;
 	}
 	
-	public int[][] genRealMap() {
+	public void genRealMap() {
 		Coordinate size = mapping.getSize();
-		
-		int[][] rmap = new int[size.y + 2][size.x + 2];
+
+		realmap = new int[size.y + 2][size.x + 2];
 		int value = -1;
-		
 
 		for (int y = 0; y < (size.y + 2); y++) {
 			
@@ -350,13 +312,11 @@ public class PilotInterface {
 						}
 					}
 				}
-				
-				rmap[y][(size.x + 1) - x] = value;
+
+				//rmap[(size.y + 1) - y][(size.x + 1) - x] = value;
+				realmap[(size.y + 1) - y][x] = value;
 				
 			}
 		}
-		
-		return rmap;
-		
 	}
 }

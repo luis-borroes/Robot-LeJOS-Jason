@@ -4,6 +4,16 @@ public class test {
 	
 	MappingGateway map;
 	
+	public int[][] mapy ={
+	        {-1,-1,-1,-1,-1,-1,-1,-1},
+			{-1,2,3,2,2,3,2,-1},
+			{-1,2,2,2,2,2,2,-1},
+			{-1,2,2,3,2,-1,2,-1},
+			{-1,3,2,-1,-1,2,2,-1},
+			{-1,2,2,2,2,2,3,-1},
+			{-1,8,2,2,2,2,-1,-1},
+			{-1,-1,-1,-1,-1,-1,-1,-1}}; 
+	
 	public test(MappingGateway m) {
 		map = m;
 	}	
@@ -14,16 +24,27 @@ public class test {
 		
 		m.setSize(new Coordinate(6, 6));
 
+//		m.setHospital(new Coordinate(0, 0));
+//		m.addVictim(new Coordinate(2, 0));
+//		m.addVictim(new Coordinate(2, 2));
+//		m.addVictim(new Coordinate(2, 4));
+//		m.addVictim(new Coordinate(0, 5));
+//		m.addVictim(new Coordinate(5, 4));
+//		m.getGridCell(1, 1).setStatus(GridCellStatus.OCCUPIED);
+//		m.getGridCell(1, 4).setStatus(GridCellStatus.OCCUPIED);
+//		m.getGridCell(4, 1).setStatus(GridCellStatus.OCCUPIED);
+//		m.getGridCell(4, 4).setStatus(GridCellStatus.OCCUPIED);
+		
 		m.setHospital(new Coordinate(0, 0));
-		m.addVictim(new Coordinate(2, 0));
-		m.addVictim(new Coordinate(2, 2));
-		m.addVictim(new Coordinate(2, 4));
-		m.addVictim(new Coordinate(0, 5));
-		m.addVictim(new Coordinate(5, 4));
-		m.getGridCell(1, 1).setStatus(GridCellStatus.OCCUPIED);
-		m.getGridCell(1, 4).setStatus(GridCellStatus.OCCUPIED);
-		m.getGridCell(4, 1).setStatus(GridCellStatus.OCCUPIED);
-		m.getGridCell(4, 4).setStatus(GridCellStatus.OCCUPIED);
+		m.addVictim(new Coordinate(0, 2));
+		m.addVictim(new Coordinate(1, 5));
+		m.addVictim(new Coordinate(2, 3));
+		m.addVictim(new Coordinate(4, 5));
+		m.addVictim(new Coordinate(5, 1));
+		m.getGridCell(5, 0).setStatus(GridCellStatus.OCCUPIED);
+		m.getGridCell(4, 3).setStatus(GridCellStatus.OCCUPIED);
+		m.getGridCell(3, 2).setStatus(GridCellStatus.OCCUPIED);
+		m.getGridCell(2, 2).setStatus(GridCellStatus.OCCUPIED);
 		
 		test o = new test(m);
 		
@@ -31,7 +52,8 @@ public class test {
 		
 		for (int i = 0; i < realmap.length; i++) {
 			for (int j = 0; j < realmap[i].length; j++) {
-				System.out.print(realmap[i][j] + ",");
+				System.out.print(o.mapy[i][j]);
+				System.out.print(realmap[i][j] + ", ");
 			}
 			
 			System.out.println();
@@ -112,8 +134,9 @@ public class test {
 						}
 					}
 				}
-				
-				rmap[y][(size.x + 1) - x] = value;
+
+				//rmap[(size.y + 1) - y][(size.x + 1) - x] = value;
+				rmap[(size.y + 1) - y][x] = value;
 				
 			}
 		}

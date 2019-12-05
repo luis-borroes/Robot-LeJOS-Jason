@@ -33,13 +33,16 @@ public class PilotComm extends Thread {
 
     public void handle(PCPacket p) {
     	if (p.id > packetID) {
-	    	if (p.cmd == Type.MOVE && !robot.getLoc()) {
-	    		robot.setPath(p.target);
+	    	if (p.cmd == Type.MOVE) {
+	    		if (!robot.getLoc()) {
+	    			robot.setPath(p.target);
+	    		}
 	    	}
 	    	
 	    	if (p.cmd == Type.INIT) {
 	    		map.load(p.map);
 	    		robot.setLoc(p.localise);
+	    		meInt.genRealMap();
 	    	}
 	    	
 	    	if (p.cmd == Type.DONE) {
@@ -53,8 +56,10 @@ public class PilotComm extends Thread {
 	    		robot.stopAmbulance();
 	    	}
 	    	
-	    	packetID = p.id;
-	    	robot.setPacketCounter(p.id);
+	    	if (!robot.getLoc()) {
+		    	packetID = p.id;
+		    	robot.setPacketCounter(p.id);
+	    	}
     	}
     }
     

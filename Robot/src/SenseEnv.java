@@ -31,6 +31,7 @@ public class SenseEnv implements Behavior {
 	public void action() {
 		suppressed = false;
 		sensing = true;
+		//System.out.println("sense");
 		if (sensing) {
 			
 			Sound.twoBeeps(); 
@@ -44,7 +45,7 @@ public class SenseEnv implements Behavior {
 		
 		if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1) { //if not wall and unseen, look at it and sense
 			
-			me.rotateUntil(me.Direction()); //rotate to the pos that it is
+			//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 			
 			if (me.Direction() == 'n') {
 				me.scanBlock(0);
@@ -98,7 +99,7 @@ public class SenseEnv implements Behavior {
 		
 		if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1) { //if not wall and unseen, look at it and sense
 			
-			me.rotateUntil(me.Direction()); //rotate to the pos that it is
+			//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 			
 			if (me.Direction() == 'n') {
 				// look 90 to the right
@@ -155,7 +156,7 @@ public class SenseEnv implements Behavior {
 		
 		if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1 && ( me.map[lookedAt.y+1][lookedAt.x] >= 1)&&( me.map[lookedAt.y][lookedAt.x-1] >= 1) ) { //if not wall and unseen, look at it and sense
 			
-			me.rotateUntil(me.Direction()); //rotate to the pos that it is
+			//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 			
 			if (me.Direction() == 'n') {
 				// look AHEAD "right 45 and return True if block has been seen there"
@@ -212,7 +213,7 @@ public class SenseEnv implements Behavior {
 			
 			if ( (lookedAt.x != -1) && (lookedAt.y != -1)  &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1) { //if not wall and unseen, look at it and sense
 				
-				me.rotateUntil(me.Direction()); //rotate to the pos that it is
+				//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 				
 				if (me.Direction() == 'n') {
 					// look 90 to the Left
@@ -268,7 +269,7 @@ public class SenseEnv implements Behavior {
 			
 			if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1 && ( me.map[lookedAt.y+1][lookedAt.x] >= 1)&&( me.map[lookedAt.y][lookedAt.x+1] >= 1) ) { //if not wall and unseen, look at it and sense
 				
-				me.rotateUntil(me.Direction()); //rotate to the pos that it is
+				//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 				
 				if (me.Direction() == 'n') {
 					// look left 45 and return True if block has been seen there"
@@ -326,7 +327,7 @@ public class SenseEnv implements Behavior {
 			
 			if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&    me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1) { //if not wall and unseen, look at it and sense
 				
-				me.rotateUntil(me.Direction()); //rotate to the pos that it is
+				//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 				
 				if (me.Direction() == 'n'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 					me.rotateUntil('s');
@@ -383,7 +384,7 @@ public class SenseEnv implements Behavior {
 		
 		if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1 && ( me.map[lookedAt.y-1][lookedAt.x] >= 1)&&( me.map[lookedAt.y][lookedAt.x+1] >= 1) ) { //if not wall and unseen, look at it and sense
 			
-			me.rotateUntil(me.Direction()); //rotate to the pos that it is
+			//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 			
 			if (me.Direction() == 'n'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('w');
@@ -439,7 +440,7 @@ public class SenseEnv implements Behavior {
 		
 		if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1 && ( me.map[lookedAt.y-1][lookedAt.x] >= 1)&&( me.map[lookedAt.y][lookedAt.x-1] >= 1) ) { //if not wall and unseen, look at it and sense
 			
-			me.rotateUntil(me.Direction()); //rotate to the pos that it is
+			//me.rotateUntil(me.Direction()); //rotate to the pos that it is
 			
 			if (me.Direction() == 'n'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('e');
@@ -487,9 +488,11 @@ public class SenseEnv implements Behavior {
 		}
 		
 		
-		me.rotateUntil(me.Direction());
+		//me.rotateUntil(me.Direction());
 		
 		//me.send = true;
+		
+		me.getRobot().stopRotating();
 	
 		}
 

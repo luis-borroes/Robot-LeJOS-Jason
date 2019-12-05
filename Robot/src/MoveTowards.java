@@ -47,6 +47,7 @@ public class MoveTowards implements Behavior {
 	public void action() {
 		// Allow this method to run
 		suppressed = false;
+		//System.out.println("movetowards");
 		
 		int dir = me.getPath().get(0);
 		me.getPath().remove(0);
@@ -56,7 +57,7 @@ public class MoveTowards implements Behavior {
 		rotate();
 		me.stopRotating();
 		
-		move(25.2);
+		move(25.3);
 		
 		me.getMap().setPosition(me.getMap().getNextCell(me.getHeading(), PilotRobot.FORWARD));
 		me.incCellCounter();

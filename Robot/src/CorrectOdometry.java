@@ -10,6 +10,97 @@ public class CorrectOdometry implements Behavior {
 	
 	private int rotateCounter;
 
+
+
+	public boolean find_wall_left() {
+		//me.getMap().isCellBlocked(me.getHeading(), PilotRobot.LEFT
+		if (me.getMap().isCellBlocked(me.getHeading(), PilotRobot.LEFT)) {
+			return true;
+		} else if (me.getMap().isCellBlocked(me.getHeading(), PilotRobot.RIGHT)) {
+			return false;
+		}
+		
+		return false;
+	}
+
+	public boolean is_wall() {
+		if (me.getMap().isCellBlocked(me.getHeading(), PilotRobot.LEFT)) {
+			return true;
+		} else if (me.getMap().isCellBlocked(me.getHeading(), PilotRobot.RIGHT)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	// public void wallCenter() {
+	// 	boolean whichWay = find_wall_left();
+
+	// 	me.realRotate(opposite(whichWay));
+	// 	rotate();
+	//     me.stopRotating();
+
+	// 	move(-18);
+	// 	move(2.5);
+
+		/*
+		whichWay = find_wall_left();
+		me.realRotate(opposite(whichWay));
+		rotate();
+	    me.stopRotating();
+
+		move(-18);
+		move(2.5);
+
+*/
+
+		//reversefor 15 or so
+		//movebackforward
+		
+	
+
+	public int opposite(boolean left) {
+		if (left) {
+			return PilotRobot.RIGHT;
+		} else {
+			return PilotRobot.LEFT;
+		}
+	}
+
+
+	// 	if ((dirr == 'n') || (dirr == 's')) {
+	// 		if(outside_map(x-1 ,y)) {
+	// 			return 'w';
+	// 		} else if (me.map[y][x-1] <= -1) {
+	// 			return 'w';
+	// 		}
+			
+	// 		if(outside_map(x+1 ,y)) {
+	// 			return 'e';
+	// 		} else if (me.map[y][x+1] <= -1) {
+	// 			return 'e';
+	// 		}
+	// 	} else if ((dirr == 'e') || (dirr == 'w')) {
+	// 		if(outside_map(x ,y-1)) {
+	// 			return 'n';
+	// 		} else if (me.map[y-1][x] <= -1) {
+	// 			return 'n';
+	// 		}
+			
+	// 		if(outside_map(x ,y+1)) {
+	// 			return 's';
+	// 		} else if (me.map[y+1][x] <= -1) {
+	// 			return 's';
+	// 		}
+			
+
+	// 	}
+	// 	return 'x';
+
+		
+	// }
+
     public CorrectOdometry(PilotRobot robot){
     	 me = robot;
     	 pilot = me.getPilot();
@@ -22,9 +113,12 @@ public class CorrectOdometry implements Behavior {
 	
 	// When called, determine if this behaviour should start
 	public boolean takeControl(){
-		return (me.getCellCounter() > 4 && !me.getMoving() && notInCorner() && notWalledIn() && !me.getDone() && !me.getMap().isCellBlocked(me.getHeading(), PilotRobot.FORWARD));
+		//remove corner and blocked in
+		return (me.getCellCounter() > 3 && !me.getMoving() && !me.getDone());
+		//REMOVED && notInCorner() && notWalledIn()
+		//AND THIS && !me.getMap().isCellBlocked(me.getHeading(), PilotRobot.FORWARD)
 	}
-	
+
 	public boolean notInCorner() {
 		Coordinate[] corners = me.getMap().getCorners();
 		
@@ -101,65 +195,86 @@ public class CorrectOdometry implements Behavior {
 		    }
 		}
 	}
+
+	public void odometry_step() {
+		if (!is_wall()) {
+			
+			//turn towards path direction if perpendicular, otherwise whichever side isn't blocked
+			if (!suppressed) {
+				if (me.getPath().size() > 0 && me.getPath().get(0) != me.getHeading()) {
+					me.rotateTowards(me.getPath().get(0));
+					
+				} else {
+					if (!me.getMap().isCellBlocked(me.getHeading(), PilotRobot.RIGHT))
+						me.realRotate(PilotRobot.RIGHT);
+				
+					else if (!me.getMap().isCellBlocked(me.getHeading(), PilotRobot.LEFT))
+						me.realRotate(PilotRobot.LEFT);
+				}
+			}
+			
+			rotate();
+			me.stopRotating();
+
+			adjustToLine();
+			pilot.stop();
+
+			me.resetGyro();
+			me.resetAssumedAngle();
+
+			//go back slightly, turn 90 degrees to the path direction
+			move(-8);
+
+		} else {
+			boolean is_left = find_wall_left();
+			me.realRotate(opposite(is_left));
+			rotate();
+			me.stopRotating();
+	
+			move(-14);
+
+			me.resetGyro();
+			me.resetAssumedAngle();
+
+			move(3);
+
+		}
+	}
 	
 	public void action() {
 		// Allow this method to run
 		suppressed = false;
 		
+		//System.out.println("odometry");
+		
 		me.startOdometry();
 
-	    pilot.setLinearSpeed(4.5);
-	    pilot.forward();
-	    pilot.setLinearAcceleration(100);
-	    
-	    //align with front
-	    adjustToLine();
-	    pilot.stop();
+		pilot.setLinearSpeed(4.5);
+		pilot.setLinearAcceleration(100);
 
-	    me.resetGyro();
-	    me.resetAssumedAngle();
+		odometry_step();
+		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		odometry_step();
 
-	    
-	    //go back slightly, turn 90 degrees to the path direction
-	    move(-8);
-	    
 
-	    //turn towards path direction if perpendicular, otherwise whichever side isn't blocked
-	    if (!suppressed)
-			if (me.getPath().size() > 0 && me.getPath().get(0) != me.getHeading()) {
-				me.rotateTowards(me.getPath().get(0));
-				
-			} else {
-		    	if (!me.getMap().isCellBlocked(me.getHeading(), PilotRobot.RIGHT))
-		    		me.realRotate(PilotRobot.RIGHT);
-		    
-		    	else if (!me.getMap().isCellBlocked(me.getHeading(), PilotRobot.LEFT))
-		    		me.realRotate(PilotRobot.LEFT);
-			}
+		// if (!suppressed) {
+		// 	if (me.getPath().size() > 0)
+		// 		me.rotateTowards(me.getPath().get(0));
+		// }
+		
+		// rotate();
+		// me.stopRotating();
 
-	    
-		rotate();
-	    me.stopRotating();
-	    
-	    
-	    //align with side
-	    adjustToLine();
-	    pilot.stop();
-	    
-	    me.resetGyro();
-	    me.resetAssumedAngle();
-	    
-	    
-	    //go back slightly, turn towards path
-	    move(-8);
-	    
-	    if (!suppressed) {
-		    if (me.getPath().size() > 0)
-				me.rotateTowards(me.getPath().get(0));
-	    }
-	    
-		rotate();
-	    me.stopRotating();
+		
+
+
 
 	    if (!suppressed)
  	    	me.resetCellCounter(false);

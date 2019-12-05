@@ -155,10 +155,11 @@ public class PCClient extends Thread {
 						System.out.println(packet.st + " " + packet.left + " " + packet.right + " " + packet.pos.x + " " + packet.pos.y);
 						
 						if (oldState != packet.st && packet.st == Status.WAITING) {
-							reached();
-						
 							if (oldState == Status.LOCALISING) {
 								route = optRoute.optimumRoute(packet.pos, mPack.hospital, map.getVictims());
+							
+							} else {	
+								reached();
 							}
 						}
 						

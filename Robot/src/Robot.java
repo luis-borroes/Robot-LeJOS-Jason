@@ -25,7 +25,7 @@ public class Robot {
 		Behavior finish = new Finish(me);
 		//Behavior calibrate = new Calibrate(me);
 
-		Behavior [] bArray = {moveLocate, pathGenLocal, senseEnv, moveTowards, correctOdometry, finish};
+		Behavior [] bArray = {moveLocate, pathGenLocal, moveTowards, correctOdometry, senseEnv, finish};
 		//Behavior [] bArray = {moveTowards, correctOdometry, finish};
 		//Behavior [] bArray = {plan, moveTowards, correctOdometry, avoid, finish};
 		//Behavior [] bArray = {calibrate};

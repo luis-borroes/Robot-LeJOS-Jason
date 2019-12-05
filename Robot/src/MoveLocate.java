@@ -51,6 +51,7 @@ public class MoveLocate implements Behavior {
 	public void action() {
 		// Allow this method to run
 		suppressed = false;
+		//System.out.println("movelocate");
 		
     	loc = meInt.loc;
     	meInt.setProbMapCol();
@@ -63,7 +64,7 @@ public class MoveLocate implements Behavior {
 			
 			me.stopRotating();
 			
-			move(25.2);
+			move(25.3);
 			
     		if (meInt.currentPath.length() > 1) {
     			meInt.currentPath = meInt.currentPath.substring(1); //remove first letter in String currnetPath
@@ -72,8 +73,8 @@ public class MoveLocate implements Behavior {
     			meInt.currentPath = "";
     		}
     		
-			me.getMap().setPosition(new Coordinate(meInt.probx, meInt.proby));
 			meInt.movePos(nextMove);
+			me.getMap().setPosition(new Coordinate(meInt.probx - 1, me.getMap().getSize().y - meInt.proby));
 			me.incCellCounter();
 	
 		    me.stopMoving();

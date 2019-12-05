@@ -35,8 +35,11 @@ public class PathGenLocal implements Behavior{
     // Start driving and then yield (for a non-busy wait). If
     // suppressed, then stop the motors and quit.
     public void action(){
+    	suppressed = false;
     	me.loc.searchLocal();
     	Sound.twoBeeps();
+    	
+		//System.out.println("pathgenlocal");
     	
 		
     	lastnOProbs = me.loc.probmappos.size();
@@ -69,7 +72,7 @@ public class PathGenLocal implements Behavior{
 			me.getRobot().setHeading(PilotRobot.WEST);
     	}
 
-		me.getRobot().getMap().setPosition(new Coordinate(mm.robotx, mm.roboty));
+		me.getRobot().getMap().setPosition(new Coordinate(mm.robotx - 1, me.getRobot().getMap().getSize().y - mm.roboty));
 		
 		
     	AStar astar = new AStar(me.realmap, mm.robotx , mm.roboty, hosx, hosy, direction );
@@ -88,9 +91,7 @@ public class PathGenLocal implements Behavior{
 			me.getRobot().setLoc(false);
 			
 		}
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {}
+
 		
     
     //	beep wait 1000 

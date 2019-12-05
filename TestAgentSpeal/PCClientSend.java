@@ -49,10 +49,10 @@ public class PCClientSend extends Thread {
 			
 			boolean running = true;
 			
-			while (running) {				
-    			oOut.reset();
+			while (running) {
+				oOut.reset();
 				oOut.writeObject(packet);
-    			oOut.flush();
+				oOut.flush();
 				
 				System.out.println(packet.id + " " + packet.target.x + " " + packet.target.y);
     			

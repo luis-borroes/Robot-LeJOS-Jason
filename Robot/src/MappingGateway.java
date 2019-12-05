@@ -26,17 +26,17 @@ public class MappingGateway {
 	}
 	
 	public void setSize(Coordinate s) {
-		size = s;
+		map = new GridCell[s.x][];
 		
-		map = new GridCell[size.x][];
-		
-		for (int x = 0; x < size.x; x++) {
-			map[x] = new GridCell[size.y];
+		for (int x = 0; x < s.x; x++) {
+			map[x] = new GridCell[s.y];
 			
-			for (int y = 0; y < size.y; y++) {
+			for (int y = 0; y < s.y; y++) {
 				map[x][y] = new GridCell();
 			}
 		}
+		
+		size = s;
 
 		corners = new Coordinate[4];
 		corners[0] = new Coordinate(0, 0);
@@ -216,11 +216,18 @@ public class MappingGateway {
 	}
 	
 	public GridCell getGridCell(Coordinate coords) {
-		return map[coords.x][coords.y];
+		if (isWithinBounds(coords)) {
+			return map[coords.x][coords.y];
+			
+		} else {
+			GridCell g = new GridCell();
+			g.setStatus(GridCellStatus.UNKNOWN);
+			return g;
+		}
 	}
 	
 	public GridCell getGridCell(int x, int y) {
-		return map[x][y];
+		return getGridCell(new Coordinate(x, y));
 	}
 	
 	public void updateCell(Coordinate coords, boolean occupied) {

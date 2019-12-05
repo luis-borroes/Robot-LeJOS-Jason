@@ -38,6 +38,7 @@ public class Finish implements Behavior {
 	
 	public void action() {
 		suppressed = false;
+		//System.out.println("finish");
 
 		Sound.playSample(file, 100);
 		Sound.beepSequenceUp();
