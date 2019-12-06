@@ -33,7 +33,12 @@ public class PilotComm extends Thread {
 
     public void handle(PCPacket p) {
     	if (p.id > packetID) {
-	    	if (p.cmd == Type.MOVE) {
+	    	if (p.cmd == Type.MOVE) { 
+//	    		System.out.println(robot.getPath().size() > 0);
+//	    		System.out.println(!robot.getRotating());
+//	    		System.out.println(!robot.getMoving());
+//	    		System.out.println(robot.getLoc());
+	    		
 	    		if (!robot.getLoc()) {
 	    			robot.setPath(p.target);
 	    		}

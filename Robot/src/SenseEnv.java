@@ -31,7 +31,9 @@ public class SenseEnv implements Behavior {
 	public void action() {
 		suppressed = false;
 		sensing = true;
-		//System.out.println("sense");
+		
+		System.out.println("sense");
+		
 		if (sensing) {
 			
 			Sound.twoBeeps(); 
@@ -203,7 +205,10 @@ public class SenseEnv implements Behavior {
 				}
 				
 			}
+			
+			
 		}
+		
 		
 			// Checking W Block
 			// Will Check for that block no matter its position if unseen 
@@ -265,6 +270,7 @@ public class SenseEnv implements Behavior {
 			// Checking NW Block
 						// Will Check for that block no matter its position if unseen 
 						
+						
 			lookedAt = lookingAt("nw"); // the cell you are currently checking
 			
 			if ( (lookedAt.x != -1) && (lookedAt.y != -1) &&  me.map[lookedAt.y][lookedAt.x] < 2 && me.map[lookedAt.y][lookedAt.x] > -1 && ( me.map[lookedAt.y+1][lookedAt.x] >= 1)&&( me.map[lookedAt.y][lookedAt.x+1] >= 1) ) { //if not wall and unseen, look at it and sense
@@ -319,6 +325,7 @@ public class SenseEnv implements Behavior {
 					
 				}
 			}
+			
 			
 			// Checking South Block
 			// Will Check for that block no matter its position if unseen 
@@ -488,11 +495,15 @@ public class SenseEnv implements Behavior {
 		}
 		
 		
-		//me.rotateUntil(me.Direction());
+		me.rotateUntil(me.Direction());
 		
 		//me.send = true;
 		
 		me.getRobot().stopRotating();
+		
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {}	
 	
 		}
 
@@ -503,17 +514,21 @@ public class SenseEnv implements Behavior {
 		int rows = me.map.length-1;
 		int cols = me.map[0].length-1;
 		if ((direction.equals("ne"))&& (me.getPosx() != cols )&& (me.getPosy() != 0 )) {
+			//return new Tuple(-1, -1);
 			return new Tuple(me.getPosx()+1, me.getPosy()-1);
 		}
 		
 		else if ((direction.equals("se"))&&(me.getPosy() != rows )&&(me.getPosx() != cols )) {
+			//return new Tuple(-1, -1);
 			return new Tuple(me.getPosx()+1, me.getPosy()+1);
 		}
-		else if ((direction.equals("sw"))&&(me.getPosy() != rows )&&(me.getPosx() != 0)) {
+		else if ((direction.equals("sw")) &&(me.getPosy() != rows )&&(me.getPosx() != 0)) {
+			//return new Tuple(-1, -1);
 			return new Tuple(me.getPosx()-1, me.getPosy()+1);
 		}
 		
 		else if ((direction.equals("nw"))&&(me.getPosy() != 0 )&&(me.getPosx() != 0))  {
+			//return new Tuple(-1, -1);
 			return new Tuple(me.getPosx()-1, me.getPosy()-1);
 		}
 		
@@ -572,6 +587,7 @@ public class SenseEnv implements Behavior {
 				mark(arrk,posy,posx-1, givenSector);
 			}
 			//LEFT N CORNER
+			/*
 			if((posx!= 0 && posy !=0) && arrA[posy-1][posx-1] == 0) { 
 				if((posx!= 0 && arrA[posy][posx-1] > -1)&&(posy!= 0 && arrA[posy-1][posx] > -1)) { 
 					//left or above is not a obs
@@ -579,24 +595,27 @@ public class SenseEnv implements Behavior {
 					markD(arrk , posy-1,posx-1, givenSector);
 				}	
 			}
+			*/
 			//RIGHT
 			if(posx!= arrA[posy].length-1 && arrA[posy][posx+1] == 0) { 
 				mark(arrk,posy,posx+1, givenSector);
 			}
 			//RIGHT N CORNER
+			/*
 			if((posx!= arrA[posy].length-1  && posy !=0) && arrA[posy-1][posx+1] == 0) { 
 				if((arrA[posy][posx+1] > -1)&&(arrA[posy-1][posx] > -1)) { 
 			
 					markD(arrk, posy-1,posx+1, givenSector);
 				}	
 			}
-			
+			*/
 			//S
 			if(posy!= arrA.length-1 && arrA[posy+1][posx] == 0) { //below
 				mark(arrk,posy+1,posx, givenSector);
 			}
 			
 			//LEFT S CORNER
+			/*
 			if((posx!= 0 && posy!= arrA.length-1) && arrA[posy+1][posx-1] == 0) { 
 				if((arrA[posy][posx-1] > -1)&&( arrA[posy+1][posx] > -1)) { 
 					markD(arrk , posy+1,posx-1, givenSector);
@@ -609,6 +628,7 @@ public class SenseEnv implements Behavior {
 					markD(arrk, posy+1,posx+1, givenSector);
 				}	
 			}
+			*/
 		
 		
 		//for(int i=0; i < arrk.length; i++) {

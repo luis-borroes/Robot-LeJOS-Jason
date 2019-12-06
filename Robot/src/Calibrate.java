@@ -21,12 +21,51 @@ public class Calibrate implements Behavior {
 	public boolean takeControl(){
 		return (true);
 	}
-
+	
+	public void rotate() {
+		while (me.getAssumedAngle() != me.getAngle() && !suppressed) {
+			double diff = me.getAssumedAngle() - me.getAngle();
+			pilot.rotate(diff, true);
+			
+		    while(pilot.isMoving() && !suppressed) {
+		    	me.update(false, diff);
+		        Thread.yield();  // wait till turn is complete or suppressed is called
+		    }
+		}
+	}
+	
 	public void action() {
 		// Allow this method to run
 		suppressed = false;
 
-		//pilot.rotate(90);
+		me.realRotate(90);
+		rotate();
+		me.stopRotating();
+		
+		me.realRotate(90);
+		rotate();
+		me.stopRotating();
+		
+		me.realRotate(90);
+		rotate();
+		me.stopRotating();
+		
+		me.realRotate(-180);
+		rotate();
+		me.stopRotating();
+		
+		me.realRotate(-180);
+		rotate();
+		me.stopRotating();
+		
+		me.realRotate(-270);
+		rotate();
+		me.stopRotating();
+		
+		me.realRotate(360);
+		rotate();
+		me.stopRotating();
+		
 		
 	    while(!suppressed) {
 	        Thread.yield();

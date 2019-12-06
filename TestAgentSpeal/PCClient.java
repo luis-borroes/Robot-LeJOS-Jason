@@ -165,13 +165,13 @@ public class PCClient extends Thread {
 						
 						oldState = packet.st;
 						
-						int c =1;
+						int c = 1;
 						String str = packet.emap;
 						
 						smap = str;
 						String[] smapp = smap.split("a");
-						for (int a = 0; a < mapp.length-1 ; a++) {
-							for (int b=0; b <mapp.length ; b++) {
+						for (int a = 0; a < mapp.length ; a++) {
+							for (int b=0; b < mapp[0].length ; b++) {
 							
 								mapp[a][b] = Integer.parseInt(smapp[c]);
 								c++;

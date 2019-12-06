@@ -107,21 +107,27 @@ public class PilotInterface {
 	
 	
 	public void rotateUntil( char direction ) {
+		System.out.print(direction);
+		
 		switch (direction) {
 			case 'n':
-				me.rotateTowards(PilotRobot.NORTH);
+				if (me.getHeading() != PilotRobot.NORTH)
+					me.rotateTowards(PilotRobot.NORTH);
 				break;
 				
 			case 'e':
-				me.rotateTowards(PilotRobot.EAST);
+				if (me.getHeading() != PilotRobot.EAST)
+					me.rotateTowards(PilotRobot.NORTH);
 				break;
 				
 			case 's':
-				me.rotateTowards(PilotRobot.SOUTH);
+				if (me.getHeading() != PilotRobot.SOUTH)
+					me.rotateTowards(PilotRobot.NORTH);
 				break;
 				
 			case 'w':
-				me.rotateTowards(PilotRobot.WEST);
+				if (me.getHeading() != PilotRobot.WEST)
+					me.rotateTowards(PilotRobot.NORTH);
 				break;
 				
 			default:
@@ -176,8 +182,8 @@ public class PilotInterface {
 			smap += "88";
 		}
 		smap+="a";
-		for (int a =0 ; a < map.length ; a++) {
-			for (int b=0; b <map[0].length ; b++) {
+		for (int a =0 ; a < map.length; a++) {
+			for (int b=0; b < map[0].length; b++) {
 				smap += this.map[a][b] + "a";
 			}
 		}

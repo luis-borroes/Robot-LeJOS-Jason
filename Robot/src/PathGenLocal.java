@@ -39,7 +39,7 @@ public class PathGenLocal implements Behavior{
     	me.loc.searchLocal();
     	Sound.twoBeeps();
     	
-		//System.out.println("pathgenlocal");
+		System.out.println("pathgenlocal");
     	
 		
     	lastnOProbs = me.loc.probmappos.size();
@@ -92,16 +92,12 @@ public class PathGenLocal implements Behavior{
 			
 		}
 
-		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {}
     
     //	beep wait 1000 
     	
-    	
-    	
-	    
-	    
-	    
-	    
 	}
     
     public String rotatePath(String path, int rot) {
