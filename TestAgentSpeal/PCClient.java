@@ -124,6 +124,10 @@ public class PCClient extends Thread {
 		sender.done();
 	}
 	
+	public void updateModel() {
+		env.update_robot_position(packet.pos.x, packet.pos.y, packet.heading);
+	}
+	
 	public RobotPacket getPacket() {
 		return packet;
 	}
@@ -158,11 +162,15 @@ public class PCClient extends Thread {
 						packet = (RobotPacket) oIn.readObject();
 						System.out.println(packet.st + " " + packet.left + " " + packet.right + " " + packet.pos.x + " " + packet.pos.y);
 						
+						updateModel();
+						
 						if (oldState != packet.st && packet.st == Status.WAITING) {
+							
 							if (oldState == Status.LOCALISING) {
 								route = optRoute.optimumRoute(packet.pos, mPack.hospital, map.getVictims());
+							}
 							
-							} else {	
+							if (sender.getTarget().equals(packet.pos)) {
 								reached();
 							}
 						}

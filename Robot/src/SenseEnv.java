@@ -27,6 +27,17 @@ public class SenseEnv implements Behavior {
 	}
 	
 
+	public void rotate() {
+		while (me.getRobot().getAssumedAngle() != me.getRobot().getAngle() && !suppressed) {
+			double diff = me.getRobot().getAssumedAngle() - me.getRobot().getAngle();
+			me.getRobot().getPilot().rotate(diff, true);
+			
+		    while(me.getRobot().getPilot().isMoving() && !suppressed) {
+		    	me.getRobot().update(false, diff);
+		        Thread.yield();  // wait till turn is complete or suppressed is called
+		    }
+		}
+	}
 		
 	public void action() {
 		suppressed = false;
@@ -84,6 +95,8 @@ public class SenseEnv implements Behavior {
 			}
 			else if (me.Direction() == 's' && me.map[lookedAt.y][lookedAt.x] == 0) {
 				me.rotateUntil('n');
+				rotate();
+				me.getRobot().stopRotating();
 				// and look ahead
 				
 				if (me.scanBlock(0)) {
@@ -127,6 +140,8 @@ public class SenseEnv implements Behavior {
 			
 			else if (me.Direction() == 'w' && me.map[lookedAt.y][lookedAt.x] == 0) {
 				me.rotateUntil('e');
+				rotate();
+				me.getRobot().stopRotating();
 				// look ahead
 				if (me.scanBlock(0)) {
 					me.map[lookedAt.y][lookedAt.x]= -1;
@@ -184,6 +199,8 @@ public class SenseEnv implements Behavior {
 			
 			else if (me.Direction() == 'w'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('n');
+				rotate();
+				me.getRobot().stopRotating();
 				//rotate to north and rotate infrared 45
 				if (me.scanBlockDiagonal(-45)) {
 					me.map[lookedAt.y][lookedAt.x]= -1;
@@ -196,6 +213,8 @@ public class SenseEnv implements Behavior {
 			else if (me.Direction() == 's' && me.map[lookedAt.y][lookedAt.x] ==0) {
 				//rotate to east and look 45 left
 				me.rotateUntil('e');
+				rotate();
+				me.getRobot().stopRotating();
 				
 				if (me.scanBlockDiagonal(45)) {
 					me.map[lookedAt.y][lookedAt.x]= -1;
@@ -233,6 +252,8 @@ public class SenseEnv implements Behavior {
 				
 				else if (me.Direction() == 'e' && me.map[lookedAt.y][lookedAt.x] ==0) {
 					me.rotateUntil('w');
+					rotate();
+					me.getRobot().stopRotating();
 					// look ahead
 					if (me.scanBlock(0)) {
 						me.map[lookedAt.y][lookedAt.x]= -1;
@@ -290,6 +311,8 @@ public class SenseEnv implements Behavior {
 				
 				else if (me.Direction() == 'e'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 					me.rotateUntil('n');
+					rotate();
+					me.getRobot().stopRotating();
 					// look  45 left and return True if block has been seen.
 					if (me.scanBlockDiagonal(45)) {
 						me.map[lookedAt.y][lookedAt.x]= -1;
@@ -314,6 +337,8 @@ public class SenseEnv implements Behavior {
 				else if (me.Direction() == 's'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 					
 					me.rotateUntil('w');
+					rotate();
+					me.getRobot().stopRotating();
 					//right 45
 					
 					if (me.scanBlockDiagonal(-45)) {
@@ -338,6 +363,8 @@ public class SenseEnv implements Behavior {
 				
 				if (me.Direction() == 'n'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 					me.rotateUntil('s');
+					rotate();
+					me.getRobot().stopRotating();
 					// look ahead
 					if (me.scanBlock(0)) {											
 						me.map[lookedAt.y][lookedAt.x]= -1;
@@ -395,6 +422,8 @@ public class SenseEnv implements Behavior {
 			
 			if (me.Direction() == 'n'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('w');
+				rotate();
+				me.getRobot().stopRotating();
 				if (me.scanBlockDiagonal(45)) {											
 					me.map[lookedAt.y][lookedAt.x]= -1;
 				}
@@ -406,6 +435,8 @@ public class SenseEnv implements Behavior {
 			
 			else if (me.Direction() == 'e'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('s');
+				rotate();
+				me.getRobot().stopRotating();
 				
 				if (me.scanBlockDiagonal(-45)) {
 					me.map[lookedAt.y][lookedAt.x]= -1;
@@ -451,6 +482,8 @@ public class SenseEnv implements Behavior {
 			
 			if (me.Direction() == 'n'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('e');
+				rotate();
+				me.getRobot().stopRotating();
 				if (me.scanBlockDiagonal(-45)) {											
 					me.map[lookedAt.y][lookedAt.x]= -1;
 				}
@@ -473,6 +506,8 @@ public class SenseEnv implements Behavior {
 			
 			else if (me.Direction() == 'w'&& me.map[lookedAt.y][lookedAt.x] ==0) {
 				me.rotateUntil('s');
+				rotate();
+				me.getRobot().stopRotating();
 				// 45
 				if (me.scanBlockDiagonal(45)) {
 					me.map[lookedAt.y][lookedAt.x]= -1;
@@ -498,8 +533,6 @@ public class SenseEnv implements Behavior {
 		//me.rotateUntil(me.Direction());
 		
 		//me.send = true;
-		
-		me.getRobot().stopRotating();
 		
 		try {
 			Thread.sleep(300);

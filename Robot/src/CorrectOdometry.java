@@ -6,6 +6,7 @@ public class CorrectOdometry implements Behavior {
 	
 	public boolean suppressed;
 	private PilotRobot me;
+	private PilotInterface meInt;
 	private MovePilot pilot;
 	
 	private int rotateCounter;
@@ -101,8 +102,9 @@ public class CorrectOdometry implements Behavior {
 		
 	// }
 
-    public CorrectOdometry(PilotRobot robot){
-    	 me = robot;
+    public CorrectOdometry(PilotInterface robot){
+    	 meInt = robot;
+    	 me = meInt.getRobot();
     	 pilot = me.getPilot();
     }
 
@@ -245,7 +247,32 @@ public class CorrectOdometry implements Behavior {
 		// Allow this method to run
 		suppressed = false;
 		
+		int oldHeading = me.getHeading();
+		
 		//System.out.println("odometry");
+		
+		if (me.getLoc()) {
+			switch (meInt.probr) {
+				case 0:
+					me.setHeading(PilotRobot.NORTH);
+					break;
+					
+				case 1:
+					me.setHeading(PilotRobot.EAST);
+					break;
+					
+				case 2:
+					me.setHeading(PilotRobot.SOUTH);
+					break;
+					
+				default:
+					me.setHeading(PilotRobot.WEST);
+					break;
+					
+			}
+		}
+		
+		int middleHeading = me.getHeading();
 		
 		me.startOdometry();
 
@@ -273,7 +300,13 @@ public class CorrectOdometry implements Behavior {
 		// me.stopRotating();
 
 		
-
+		if (me.getLoc()) {
+			me.rotateTowards(middleHeading);
+			rotate();
+			me.stopRotating();
+			
+			me.setHeading(oldHeading);
+		}
 
 
 	    if (!suppressed)

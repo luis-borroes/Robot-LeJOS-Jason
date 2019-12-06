@@ -8,7 +8,6 @@ public class Finish implements Behavior {
 	public boolean suppressed;
 	private PilotRobot me;
 	private MovePilot pilot;
-	File file = new File("raspberry.wav");
 	
 	public Finish(PilotRobot robot)  {
 		me = robot;
@@ -40,7 +39,7 @@ public class Finish implements Behavior {
 		suppressed = false;
 		//System.out.println("finish");
 
-		Sound.playSample(file, 100);
+	    pilot.setAngularSpeed(100);
 		Sound.beepSequenceUp();
 		
 		me.realRotate(360 * 3);

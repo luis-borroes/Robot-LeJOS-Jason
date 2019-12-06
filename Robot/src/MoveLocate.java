@@ -62,7 +62,7 @@ public class MoveLocate implements Behavior {
     		char nextMove = meInt.currentPath.charAt(0);
 			me.startMoving();
 			meInt.rotateUntil(nextMove);
-			
+			rotate();
 			me.stopRotating();
 			
 			move(25.3);
@@ -75,7 +75,7 @@ public class MoveLocate implements Behavior {
     		}
     		
 			meInt.movePos(nextMove);
-			me.getMap().setPosition(new Coordinate(meInt.probx - 1, me.getMap().getSize().y - meInt.proby));
+
 			me.incCellCounter();
 		    me.stopMoving();
 		    
@@ -89,6 +89,8 @@ public class MoveLocate implements Behavior {
 	
 		    meInt.setProbMapCol();
 	    	loc.searchLocal();
+	    	
+			me.getMap().setPosition(new Coordinate(meInt.probx - 1, me.getMap().getSize().y - meInt.proby));
 	    	
     	}
 	}

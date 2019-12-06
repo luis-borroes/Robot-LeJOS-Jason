@@ -86,8 +86,8 @@ public class PilotRobot {
 	    pilot = new MovePilot(myChassis);
 	    pilot.setLinearAcceleration(50);
 	    pilot.setLinearSpeed(20);
-	    pilot.setAngularAcceleration(75);
-	    pilot.setAngularSpeed(70);
+	    //pilot.setAngularAcceleration(75);
+	    pilot.setAngularSpeed(45);
 //	    pilot.setAngularAcceleration(50);
 //	    pilot.setAngularSpeed(40);
 	    

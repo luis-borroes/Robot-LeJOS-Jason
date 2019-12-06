@@ -68,7 +68,6 @@ public class PathGenLocal implements Behavior{
     		direction = 'w';
     	}
 		
-		
     	AStar astar = new AStar(me.realmap, mm.robotx , mm.roboty, hosx, hosy, direction );
 		String astarpath = astar.process();
 

@@ -17,6 +17,10 @@ public class PCClientSend extends Thread {
     	packet.map = map;
 		packet.localise = true;
     }
+	
+	public Coordinate getTarget() {
+		return packet.target;
+	}
 
     public void update(int x, int y, boolean goingToHospital) {
     	if (!initPacket) {

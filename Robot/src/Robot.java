@@ -21,7 +21,7 @@ public class Robot {
 		Behavior senseEnv = new SenseEnv(meInt);
 		Behavior pathGenLocal = new PathGenLocal(meInt);
 		Behavior moveTowards = new MoveTowards(me);
-		Behavior correctOdometry = new CorrectOdometry(me);
+		Behavior correctOdometry = new CorrectOdometry(meInt);
 		Behavior finish = new Finish(me);
 		//Behavior calibrate = new Calibrate(me);
 

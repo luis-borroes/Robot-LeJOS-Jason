@@ -18,10 +18,12 @@ public class PilotCommSend extends Thread {
     }
 
     public RobotPacket update(RobotPacket p) {
-    	if (robot.getPath().size() > 0 || (robot.getRotating() || robot.getMoving()))
+    	if (robot.getPath().size() > 0 || (robot.getRotating() || robot.getMoving())) {
     		p.st = Status.MOVING;
-    	else
+    		
+    	} else {
     		p.st = Status.WAITING;
+    	}
     	
     	if (robot.getOdometry())
     		p.st = Status.ODOMETRY;
@@ -30,11 +32,11 @@ public class PilotCommSend extends Thread {
     		p.st = Status.LOCALISING;
     	}
     	
-    	
 		p.left = robot.getLColID();
 		p.right = robot.getRColID();
 		
 		p.pos = robot.getMap().getCurrentPosition();
+		p.heading = robot.getHeading();
 		
 		p.emap = meInt.map;
 		p.direction = meInt.Direction();

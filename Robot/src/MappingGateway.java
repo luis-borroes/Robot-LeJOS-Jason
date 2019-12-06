@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class MappingGateway {
-	private GridCell[][] map;
+	private volatile GridCell[][] map;
 	private Coordinate currentPosition;
 	private Coordinate hospital;
 	private Coordinate size;

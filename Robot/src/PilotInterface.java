@@ -133,22 +133,22 @@ public class PilotInterface {
 				break;
 		}
 		
-		while (me.getAssumedAngle() != me.getAngle()) {
-			double diff = me.getAssumedAngle() - me.getAngle();
-			me.getPilot().rotate(diff, true);
-			
-		    while(me.getPilot().isMoving()) {
-		    	me.update(false, diff);
-		        Thread.yield();  // wait till turn is complete or suppressed is called
-		    }
-		}
+//		while (me.getAssumedAngle() != me.getAngle()) {
+//			double diff = me.getAssumedAngle() - me.getAngle();
+//			me.getPilot().rotate(diff, true);
+//			
+//		    while(me.getPilot().isMoving()) {
+//		    	me.update(false, diff);
+//		        Thread.yield();  // wait till turn is complete or suppressed is called
+//		    }
+//		}
 		
-		try {
-			Thread.sleep(300);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(900);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 	}
 	

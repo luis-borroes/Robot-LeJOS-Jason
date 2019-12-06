@@ -16,7 +16,14 @@ public class ParamedicEnv extends Environment {
     public static final int HOSPITAL  = 8; // hospital code in grid model
     public static final int VICTIM  = 16; // victim code in grid model
 	public static final int NONCRITICAL = 32;
+	public static final int ROBOT = 64;
+
+	public int currentangle = PathFinding.NORTH;
+	public boolean going_hospital = false;
+	
 	public int counter = 0;
+	public int robot_x = 0;
+	public int robot_y = 0;
     private Logger logger = Logger.getLogger("testing"+ParamedicEnv.class.getName());
     
     // Create objects for visualising the bay.  
@@ -62,14 +69,20 @@ public class ParamedicEnv extends Environment {
 				
 			}else if (action.getFunctor().equals("move_towards_victim")) {
 				model.move_towards_victim();
-				
+
 			} else if (action.getFunctor().equals("addNonCritical")) {
 				int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
 				model.addNonCritical(x, y);
 				
 			} else if (action.getFunctor().equals("go_to_hospital")) {
+				going_hospital = true;
+				model.tell_repaint();
 				model.go_to_hospital();
+				
+			} else if (action.getFunctor().equals("add_robot")) {
+				model.add_robot(0,0,ROBOT);	
+			
 			
 			} else if (action.getFunctor().equals("remove_critical")) {
 				int x = (int)((NumberTerm)action.getTerm(0)).solve();
@@ -79,10 +92,17 @@ public class ParamedicEnv extends Environment {
 				int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
 				model.remove_non_critical(x, y);
+			} else if (action.getFunctor().equals("remove_victim")) {
+				int x = (int)((NumberTerm)action.getTerm(0)).solve();
+                int y = (int)((NumberTerm)action.getTerm(1)).solve();
+				model.removeVictim(x, y);
 			}else if (action.getFunctor().equals("pickupnoncritical")) {
 				pickupnoncritical();
 			}else if (action.getFunctor().equals("startserver")) {
 				start_server();
+				
+			} else if (action.getFunctor().equals("repaint")) {
+				model.tell_repaint();
 				
 			} else if (action.getFunctor().equals("pickupnoncritical")) {
 				pickupnoncritical();
@@ -127,6 +147,9 @@ public class ParamedicEnv extends Environment {
 	public void done() {
 		client.done();
 	}
+	public void update_robot_position(int x, int y, int robot) {
+		model.update_robot_position(x,y,robot);
+	}
 	
 	public void pickupnoncritical() {
 		client.go_to_noncriticals();
@@ -136,6 +159,8 @@ public class ParamedicEnv extends Environment {
 	public void at_hospital() {
 		
 		System.out.println("at_hospital(" + counter + ")");
+		going_hospital = false;
+		model.tell_repaint();
 		addPercept("paramedic",Literal.parseLiteral("at_hospital(" + counter + ")"));
 		counter++;
 	}
@@ -163,7 +188,7 @@ public class ParamedicEnv extends Environment {
             super(GSize, GSize, 1);	// The third parameter is the number of agents
 
 			try {
-				setAgPos(0, 0, 0);
+				//setAgPos(0, 0, 0);
 			} catch (Exception e) {
 				e.printStackTrace();	
 			}
@@ -211,6 +236,10 @@ public class ParamedicEnv extends Environment {
 			view.repaint();
 		}
 		
+		void tell_repaint() {
+			view.repaint();	
+		}
+		
 
 		void remove_critical(int x, int y) {
 			remove(VICTIM, x, invertY(y));
@@ -223,6 +252,25 @@ public class ParamedicEnv extends Environment {
 			view.repaint();
 		}
 		
+		void add_robot(int x, int y, int robot) {
+			add(robot, x, invertY(y));
+			
+			System.out.println(robot);
+			
+			robot_x = x;
+			robot_y = y;
+			//view.repaint();
+		}
+		
+		void update_robot_position(int x, int y, int heading) {
+			remove(ROBOT, robot_x, invertY(robot_y));
+			add(ROBOT, x, invertY(y));
+			currentangle = heading;
+			
+			robot_x = x;
+			robot_y = y;
+			view.repaint();
+		}
 		
 		
         void removeVictim(int x, int y) { 
@@ -264,7 +312,6 @@ public class ParamedicEnv extends Environment {
         /** draw application objects */
         @Override
         public void draw(Graphics g, int x, int y, int object) {
-			//System.out.println(object);
             switch (object) {
             case ParamedicEnv.VICTIM:
                 drawVictim(g, x, y);
@@ -275,13 +322,16 @@ public class ParamedicEnv extends Environment {
 			case ParamedicEnv.NONCRITICAL:
 				drawNonCritical(g, x, y);
 				break;
+			case ParamedicEnv.ROBOT:
+				drawRobot(g, x, y);
+				break;
            }
         }
         
         public void drawVictim(Graphics g, int x, int y) {
             //super.drawObstacle(g, x, y);
             g.setColor(Color.black);
-            drawString(g, x, y, defaultFont, "V");
+            drawString(g, x, y, defaultFont, "!");
         }
 
         public void drawHospital(Graphics g, int x, int y) {
@@ -294,6 +344,41 @@ public class ParamedicEnv extends Environment {
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, ":|");
 		}
+		
+		public void drawRobot(Graphics g, int x, int y) {
+			if(going_hospital) {
+				g.setColor(Color.red);
+			} else {
+				g.setColor(Color.black);	
+			}
+			//g.setColor(Color.black);
+			
+			String current;
+			switch (currentangle) {
+				case (PathFinding.NORTH):
+					current = "^";
+					break;
+					
+				case (PathFinding.EAST):
+					current = ">";
+					break;
+				
+				case (PathFinding.SOUTH):
+					current = "v";
+					break;
+				
+				case (PathFinding.WEST):
+					current = "<";
+					break;
+				
+				default:
+					current = "?";
+					break;
+			}
+			
+			drawString(g, x, y, defaultFont, current);
+		}
+		
     }
     // ======================================================================
 }

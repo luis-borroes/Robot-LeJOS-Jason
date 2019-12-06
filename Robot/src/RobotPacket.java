@@ -8,6 +8,7 @@ public class RobotPacket implements Serializable {
 	Color right = Color.WHITE;
 	
 	Coordinate pos = new Coordinate(0, 0);
+	int heading = PathFinding.NORTH;
 	
 	int[][] emap;
 	char direction;

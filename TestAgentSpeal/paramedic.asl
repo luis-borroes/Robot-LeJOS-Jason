@@ -90,6 +90,8 @@ plays(initiator,doctor).
 	   //.print("We are here now");
 		//-startRescueMission(D,C,NC);
 		+startedWith(Vcount);
+		add_robot;
+		repaint;
 		startserver.
 
 		
@@ -134,6 +136,7 @@ plays(initiator,doctor).
 +~critical(X,Y): .count(victim_found(_,_,_)) > 2
     <- .print("The vic121212t ", X, ",", Y, " is not critical");
 		//addNonCritical(X,Y);   // maybe we should be removing them from the map
+		remove_victim(X,Y);
 		go_to_hospital.
 
 
@@ -212,7 +215,8 @@ plays(initiator,doctor).
 		!requestVictimStatus(doctor, X, Y, C).
 		
 +at_non_critical(X,Y)
-	<- .print("at non crit"); 
+	<- .print("at non crit");
+		remove_non_critical;
 		go_to_hospital.
 	
 +test(C)
