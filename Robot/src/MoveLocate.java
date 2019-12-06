@@ -52,7 +52,7 @@ public class MoveLocate implements Behavior {
 		// Allow this method to run
 		suppressed = false;
 		
-		System.out.println("movelocate");
+		//System.out.println("movelocate");
 		
     	loc = meInt.loc;
     	meInt.setProbMapCol();
@@ -78,6 +78,10 @@ public class MoveLocate implements Behavior {
 			me.getMap().setPosition(new Coordinate(meInt.probx - 1, me.getMap().getSize().y - meInt.proby));
 			me.incCellCounter();
 		    me.stopMoving();
+		    
+		    me.startRotating();
+		    rotate();
+		    me.stopRotating();
 			
 			try {
 				Thread.sleep(200);

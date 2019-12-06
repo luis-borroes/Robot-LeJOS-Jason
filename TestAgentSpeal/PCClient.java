@@ -31,6 +31,10 @@ public class PCClient extends Thread {
 			{0,0,0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0,0,0}};
 			
+	public static char direction = 'n';
+	
+	public static Coordinate pos = new Coordinate(6, 6);
+			
 	public static GUI gui;
 	String smap = "";
 	
@@ -165,20 +169,9 @@ public class PCClient extends Thread {
 						
 						oldState = packet.st;
 						
-						int c = 1;
-						String str = packet.emap;
-						
-						smap = str;
-						String[] smapp = smap.split("a");
-						for (int a = 0; a < mapp.length ; a++) {
-							for (int b=0; b < mapp[0].length ; b++) {
-							
-								mapp[a][b] = Integer.parseInt(smapp[c]);
-								c++;
-							}
-						}
-						mapp[Integer.parseInt(""+smapp[0].charAt(0))][Integer.parseInt(""+smapp[0].charAt(1))] = Integer.parseInt(""+smapp[0].charAt(2)+smapp[0].charAt(3));
-						
+						mapp = packet.emap;
+						direction = packet.direction;
+						pos = packet.epos;
 						
 						GUI.updateMap();
 					}

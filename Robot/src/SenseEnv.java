@@ -32,7 +32,7 @@ public class SenseEnv implements Behavior {
 		suppressed = false;
 		sensing = true;
 		
-		System.out.println("sense");
+		//System.out.println("sense");
 		
 		if (sensing) {
 			
@@ -495,7 +495,7 @@ public class SenseEnv implements Behavior {
 		}
 		
 		
-		me.rotateUntil(me.Direction());
+		//me.rotateUntil(me.Direction());
 		
 		//me.send = true;
 		
@@ -514,22 +514,22 @@ public class SenseEnv implements Behavior {
 		int rows = me.map.length-1;
 		int cols = me.map[0].length-1;
 		if ((direction.equals("ne"))&& (me.getPosx() != cols )&& (me.getPosy() != 0 )) {
-			//return new Tuple(-1, -1);
-			return new Tuple(me.getPosx()+1, me.getPosy()-1);
+			return new Tuple(-1, -1);
+			//return new Tuple(me.getPosx()+1, me.getPosy()-1);
 		}
 		
 		else if ((direction.equals("se"))&&(me.getPosy() != rows )&&(me.getPosx() != cols )) {
-			//return new Tuple(-1, -1);
-			return new Tuple(me.getPosx()+1, me.getPosy()+1);
+			return new Tuple(-1, -1);
+		//	return new Tuple(me.getPosx()+1, me.getPosy()+1);
 		}
 		else if ((direction.equals("sw")) &&(me.getPosy() != rows )&&(me.getPosx() != 0)) {
-			//return new Tuple(-1, -1);
-			return new Tuple(me.getPosx()-1, me.getPosy()+1);
+			return new Tuple(-1, -1);
+			//return new Tuple(me.getPosx()-1, me.getPosy()+1);
 		}
 		
 		else if ((direction.equals("nw"))&&(me.getPosy() != 0 )&&(me.getPosx() != 0))  {
-			//return new Tuple(-1, -1);
-			return new Tuple(me.getPosx()-1, me.getPosy()-1);
+			return new Tuple(-1, -1);
+			//return new Tuple(me.getPosx()-1, me.getPosy()-1);
 		}
 		
 		else if ((direction.equals("n"))&&(me.getPosy() != 0 )) {

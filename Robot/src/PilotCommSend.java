@@ -36,7 +36,9 @@ public class PilotCommSend extends Thread {
 		
 		p.pos = robot.getMap().getCurrentPosition();
 		
-		p.emap = meInt.sendMap();
+		p.emap = meInt.map;
+		p.direction = meInt.Direction();
+		p.epos = new Coordinate(meInt.getPosx(), meInt.getPosy());
 		
 		return p;
     }

@@ -185,6 +185,10 @@ public class PilotRobot {
 		return rotating;
 	}
 	
+	public void startRotating() {
+		rotating = true;
+	}
+	
 	public void stopRotating() {
 		rotating = false;
 	}
@@ -313,7 +317,7 @@ public class PilotRobot {
 		path = map.getDirections(target, heading);
 		
 		if (path.size() == 0)
-			done();;
+			done();
 	}
 	
 	

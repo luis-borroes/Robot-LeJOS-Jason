@@ -9,7 +9,9 @@ public class RobotPacket implements Serializable {
 	
 	Coordinate pos = new Coordinate(0, 0);
 	
-	String emap = "";
+	int[][] emap;
+	char direction;
+	Coordinate epos = new Coordinate(6, 6);
 
 	public RobotPacket() {
 		

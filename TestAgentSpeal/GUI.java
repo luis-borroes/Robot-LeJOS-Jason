@@ -17,19 +17,7 @@ import java.awt.event.*;
 
 
 public class GUI {
-	public static int[][]map = {
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0}};
+
 	static Socket sock;
 	static GUI g;
 	public static JFrame frame;
@@ -40,69 +28,38 @@ public class GUI {
     	g = new GUI();
 		
 		 
-		/*
-    	String ip = "192.168.70.161"; 
-    	
-		if(args.length > 0)
-			ip = args[0];
-		sock = new Socket(ip, 1234);
-		System.out.println("Connected");
-		while (true) {
-			
-		InputStream in = sock.getInputStream();
-		DataInputStream dIn = new DataInputStream(in);
-		String str = dIn.readUTF();
-		
-		
-    	System.out.println(str);
-    	//updates the map
-    	
-    	String smap ="";
-    	int c =0;
-    	
-    	if (smap.length()!=0 && !str.equals(smap) && !allMap()) {
-    		
-    		smap = str;
-    		String[] smapp = smap.split("a");
-    		for (int a = 0; a < 7 ; a++) {
-    			for (int b=0; b <6 ; b++) {
-    			
-    				map[a][b] = Integer.parseInt(smapp[c]);
-    				c++;
-    				allMap();
-    			}
-    		}
-    	}
-    	sock.close();
-		}
-		*/
+    	//String ip = "192.168.70.161"; 
+
     			
     		
     }
     
     	
     public static void updateMap() {
-    	int column = map[0].length;
-    	int rows = map.length;
+    	int column = PCClient.mapp[0].length;
+    	int rows = PCClient.mapp.length;
     	
     	for (int i = 0; i < rows; i++){         // iterates each student
             for (int j = 0; j < column; j++){  // iterates each grade
                 // do something with grade[i][j]
             	String Number = Integer.toString(PCClient.mapp[i][j]);
-            	if (Number.equals("85")) {
-            		btns[i][j].setText("^");
-            		
-            	} else if (Number.equals("86")) {
-            		btns[i][j].setText(">");
-            		
-            	} else if (Number.equals("87")) {
-            		btns[i][j].setText("<");
-            		
-            	}
-            	else if (Number.equals("88")) {
-            		btns[i][j].setText("v");
-            		
-            	}else {
+				
+            	if (PCClient.pos.equals(new Coordinate(j, i))) {
+					if (PCClient.direction == 'n') {
+						btns[i][j].setText("^");
+						
+					} else if (PCClient.direction == 'e') {
+						btns[i][j].setText(">");
+						
+					} else if (PCClient.direction == 'w') {
+						btns[i][j].setText("<");
+						
+					}
+					else if (PCClient.direction == 's') {
+						btns[i][j].setText("v");
+					}
+					
+				} else {
             	
             		btns[i][j].setText("" + Number);
             	}
@@ -119,9 +76,9 @@ public class GUI {
     
 	
 	public static boolean allMap() {
-		for (int a = 0; a < map.length ; a++) {
-    		for (int b=0; b <map[0].length ; b++) {
-    			if (map[a][b] == 0)
+		for (int a = 0; a < PCClient.mapp.length ; a++) {
+    		for (int b=0; b < PCClient.mapp[0].length ; b++) {
+    			if (PCClient.mapp[a][b] == 0)
     			{
     				return false;
     			}
@@ -161,8 +118,8 @@ public class GUI {
     public class TestPane extends JPanel {
 
         public TestPane() {
-        	int column = map[0].length;
-        	int rows = map.length;
+        	int column = PCClient.mapp[0].length;
+        	int rows = PCClient.mapp.length;
         	
             setLayout(new GridLayout(rows, column));
             

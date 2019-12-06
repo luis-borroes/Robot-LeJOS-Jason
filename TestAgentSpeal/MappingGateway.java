@@ -14,7 +14,7 @@ public class MappingGateway {
 	public MappingGateway(Coordinate initialPos) {
 		this.setPosition(initialPos);
 		
-		setSize(new Coordinate(6, 7));
+		setSize(new Coordinate(6, 6));
 
 		setHospital(0, 0);
 		getGridCell(initialPos).setStatus(GridCellStatus.UNOCCUPIED);

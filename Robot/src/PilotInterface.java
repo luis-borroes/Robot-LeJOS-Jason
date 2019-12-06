@@ -107,7 +107,6 @@ public class PilotInterface {
 	
 	
 	public void rotateUntil( char direction ) {
-		System.out.print(direction);
 		
 		switch (direction) {
 			case 'n':
@@ -117,17 +116,17 @@ public class PilotInterface {
 				
 			case 'e':
 				if (me.getHeading() != PilotRobot.EAST)
-					me.rotateTowards(PilotRobot.NORTH);
+					me.rotateTowards(PilotRobot.EAST);
 				break;
 				
 			case 's':
 				if (me.getHeading() != PilotRobot.SOUTH)
-					me.rotateTowards(PilotRobot.NORTH);
+					me.rotateTowards(PilotRobot.SOUTH);
 				break;
 				
 			case 'w':
 				if (me.getHeading() != PilotRobot.WEST)
-					me.rotateTowards(PilotRobot.NORTH);
+					me.rotateTowards(PilotRobot.WEST);
 				break;
 				
 			default:
@@ -142,6 +141,13 @@ public class PilotInterface {
 		    	me.update(false, diff);
 		        Thread.yield();  // wait till turn is complete or suppressed is called
 		    }
+		}
+		
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
