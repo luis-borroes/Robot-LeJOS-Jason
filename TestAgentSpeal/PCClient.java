@@ -168,6 +168,8 @@ public class PCClient extends Thread {
 							
 							if (oldState == Status.LOCALISING) {
 								route = optRoute.optimumRoute(packet.pos, mPack.hospital, map.getVictims());
+								rCounter = 0;
+								goToNextVictim();
 							}
 							
 							if (sender.getTarget().equals(packet.pos)) {

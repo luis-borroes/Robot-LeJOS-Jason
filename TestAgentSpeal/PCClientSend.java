@@ -26,8 +26,9 @@ public class PCClientSend extends Thread {
     	if (!initPacket) {
 			packet.id++;
 	        packet.cmd = Type.MOVE;
-	        packet.target.x = x;
-	        packet.target.y = y;
+			
+			packet.target.x = x;
+			packet.target.y = y;
 			
 			if (goingToHospital) {
 				packet.ambulance = true;
